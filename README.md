@@ -29,8 +29,8 @@ DepokRasa adalah aplikasi yang bertujuan untuk memberikan informasi tentang berb
 1. [Authentication (auth) and User Management](#1-authentication-auth-and-user-management)(Joe Mathew Rusli)
 2. [Menu Management](#2-menu-management)(Philip Halomoan Sampenta Manurung)
 3. [Information on Promotions and Discounts](#3-information-on-promotions-and-discounts)(Laurentius Farel Arlana Mahardika)
-4. [Articles](#4-blogarticles)(Muhammad Wendy Fyfo Anggara)
-5. [Feedback and Support](#5-feedback-and-support)(Farrel Athalla Muljawab)
+4. [Articles](#4-articles)(Muhammad Wendy Fyfo Anggara)
+5. [Feedback and Support](#5-feedback-and-support)(Farrel Athalla Muljawan)
 
 ### 1. Authentication (auth) and User Management
 **Features:**
@@ -102,7 +102,7 @@ Langkah yang kami lakukan untuk mengintegrasikan DepokRasa mobile dengan web ser
 
 6. Menggunakan dependensi `pbp_django_auth` untuk mengintegrasi *authentication* dari django web service
 
-7. Memanfaatkan method class CookieRequest dari `pbp_django_auth`, seperti `.login()`, dan `.register()` untuk mengurus request login dan register akun baru.
+7. Memanfaatkan method class CookieRequest dari `pbp_django_auth`, seperti `.login()`, dan `.register()` untuk mengurus request login dan register akun baru melalui aplikasi *mobile*.
 
 ---
 
