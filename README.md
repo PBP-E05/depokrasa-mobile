@@ -26,11 +26,11 @@ DepokRasa adalah aplikasi yang bertujuan untuk memberikan informasi tentang berb
 
 ---
 ## Daftar Modul 
-1. [Authentication (auth) and User Management (Joe Mathew Rusli)](#1-authentication-auth-and-user-management)
-2. [Menu Management (Philip Halomoan Sampenta Manurung)](#3-menu-management)
-3. [Information on Promotions and Discounts (Laurentius Farel Arlana Mahardika)](#5-information-on-promotions-and-discounts)
-4. [Articles (Muhammad Wendy Fyfo Anggara)](#6-blogarticles)
-5. [Feedback and Support (Farrel Athalla Muljawab)](#7-feedback-and-support)
+1. [Authentication (auth) and User Management](#1-authentication-auth-and-user-management)(Joe Mathew Rusli)
+2. [Menu Management](#2-menu-management)(Philip Halomoan Sampenta Manurung)
+3. [Information on Promotions and Discounts](#3-information-on-promotions-and-discounts)(Laurentius Farel Arlana Mahardika)
+4. [Articles](#4-blogarticles)(Muhammad Wendy Fyfo Anggara)
+5. [Feedback and Support](#5-feedback-and-support)(Farrel Athalla Muljawab)
 
 ### 1. Authentication (auth) and User Management
 **Features:**
