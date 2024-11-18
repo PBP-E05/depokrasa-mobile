@@ -89,7 +89,7 @@ DepokRasa adalah aplikasi yang bertujuan untuk memberikan informasi tentang berb
    - **Views**: Admin Panel (menggunakan Django Admin)
 ---
 ## Alur Integrasi Web Service
-Langkah yang kami lakukan untuk mengintegrasikan DepokRasa mobile dengan web service DepokRasa adalah:
+Langkah yang kami lakukan untuk mengintegrasikan DepokRasa mobile dengan web service Django adalah:
 1.  Menambahkan dependensi http ke proyek; dependensi ini digunakan untuk bertukar HTTP request antara aplikasi dengan web service.
 
 2.  Membuat model sesuai dengan respons dari data yang berasal dari web service DepokRasa.
