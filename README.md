@@ -79,7 +79,7 @@ DepokRasa adalah aplikasi yang bertujuan untuk memberikan informasi tentang berb
 - Feedback
 
 ---
-## Peran
+## Peran Pengguna Aplikasi
 1. **Pengguna Umum**: Pengguna yang dapat menelusuri produk makanan, menandai favorit, dan memberikan ulasan serta peringkat.
    - **Fitur Utama**: Registrasi, login/logout, melihat menu, dan membuat wishlist.
    - **Views**: Halaman dashboard pengguna, halaman profil, halaman wishlist.
