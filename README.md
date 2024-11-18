@@ -1,7 +1,7 @@
 # Depokrasa Mobile
 ---
 ## URL APK
-[DepokRasa Mobile]()
+- [DepokRasa Mobile]()
 ---
 ## Daftar Anggota
 - Muhammad Wendy Fyfo Anggara (2306223906)
