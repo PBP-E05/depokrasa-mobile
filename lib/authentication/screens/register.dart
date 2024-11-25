@@ -1,42 +1,23 @@
-import 'package:depokrasa_mobile/shared/menu.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:depokrasa_mobile/authentication/screens/register.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:depokrasa_mobile/authentication/screens/login.dart';
 
-void main() {
-  runApp(const LoginApp());
-}
-
-class LoginApp extends StatelessWidget {
-  const LoginApp({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.deepPurple,
-        ).copyWith(secondary: Colors.deepPurple[400]),
-      ),
-      home: const LoginPage(),
-    );
-  }
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Register'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -60,14 +41,14 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Login',
+                    'Register',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 30.0),
-                  TextField(
+                  TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
                       labelText: 'Username',
@@ -78,9 +59,15 @@ class _LoginPageState extends State<LoginPage> {
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 12.0),
-                  TextField(
+                  TextFormField(
                     controller: _passwordController,
                     decoration: const InputDecoration(
                       labelText: 'Password',
@@ -92,57 +79,68 @@ class _LoginPageState extends State<LoginPage> {
                           EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                     ),
                     obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 12.0),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      hintText: 'Confirm your password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your password';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 24.0),
                   ElevatedButton(
                     onPressed: () async {
                       String username = _usernameController.text;
-                      String password = _passwordController.text;
+                      String password1 = _passwordController.text;
+                      String password2 = _confirmPasswordController.text;
 
                       String baseUrl =
                           dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
-                      String apiUrl = "$baseUrl/auth/login/";
+                      String apiUrl = "$baseUrl/auth/register/";
 
-                      final response = await request.login(
+                      final response = await request.postJson(
                           apiUrl,
-                          {
+                          jsonEncode({
                             'username': username,
-                            'password': password,
-                          }.map(
-                              (key, value) => MapEntry(key, value.toString())));
+                            'password1': password1,
+                            'password2': password2,
+                          }));
 
-                      if (request.loggedIn) {
-                        String message = response['message'];
-                        String uname = response['username'];
-                        if (context.mounted) {
+                      if (context.mounted) {
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Successfully registered!'),
+                            ),
+                          );
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyHomePage()),
+                                builder: (context) => const LoginPage()),
                           );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text("$message Selamat datang, $uname.")),
-                            );
-                        }
-                      } else {
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Login Gagal'),
-                              content: Text(response['message']),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to register!'),
                             ),
                           );
                         }
@@ -154,19 +152,19 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                     ),
-                    child: const Text('Login'),
+                    child: const Text('Register'),
                   ),
                   const SizedBox(height: 36.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RegisterPage()),
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: Text(
-                      'Don\'t have an account? Register',
+                      'Already have an account? Login',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 16.0,
