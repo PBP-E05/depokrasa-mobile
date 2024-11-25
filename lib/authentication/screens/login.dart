@@ -4,6 +4,8 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:depokrasa_mobile/authentication/screens/register.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const LoginApp());
@@ -103,30 +105,21 @@ class _LoginPageState extends State<LoginPage> {
                           dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
                       String apiUrl = "$baseUrl/auth/login/";
 
-                      final response = await request.login(
-                          apiUrl,
-                          {
-                            'username': username,
-                            'password': password,
-                          }.map(
-                              (key, value) => MapEntry(key, value.toString())));
+                      final response = await http.post(
+                        Uri.parse(apiUrl),
+                        body: {
+                          'username': username,
+                          'password': password,
+                        },
+                      );
 
-                      if (request.loggedIn) {
-                        String message = response['message'];
-                        String uname = response['username'];
+                      if (response.statusCode == 200) {
                         if (context.mounted) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MyHomePage()),
                           );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text("$message Selamat datang, $uname.")),
-                            );
                         }
                       } else {
                         if (context.mounted) {
@@ -134,7 +127,6 @@ class _LoginPageState extends State<LoginPage> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Login Gagal'),
-                              content: Text(response['message']),
                               actions: [
                                 TextButton(
                                   child: const Text('OK'),
