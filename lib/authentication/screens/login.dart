@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:depokrasa_mobile/authentication/screens/register.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:depokrasa_mobile/shared/menu.dart';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -53,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                
+
                 // Main Content
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -62,12 +65,12 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       // Header Section
                       SizedBox(height: 80),
-                        Center(
+                      Center(
                         child: Image.asset(
                           'images/depokrasa-logo.png',
                           height: 80,
                         ),
-                        ),
+                      ),
                       SizedBox(height: 8),
                       Text(
                         'Sign in to continue',
@@ -76,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                           fontSize: 18,
                         ),
                       ),
-                      
+
                       // Login Form
                       SizedBox(height: 40),
                       Card(
@@ -93,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
                               TextField(
                                 controller: _usernameController,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.person_outline, color: Colors.yellow.shade800),
+                                  prefixIcon: Icon(Icons.person_outline,
+                                      color: Colors.yellow.shade800),
                                   labelText: 'Username',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(15),
@@ -104,23 +108,25 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               SizedBox(height: 16),
-                              
+
                               // Password TextField
                               TextField(
                                 controller: _passwordController,
                                 obscureText: !_isPasswordVisible,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock_outline, color: Colors.yellow.shade800),
+                                  prefixIcon: Icon(Icons.lock_outline,
+                                      color: Colors.yellow.shade800),
                                   suffixIcon: IconButton(
                                     icon: Icon(
-                                      _isPasswordVisible 
-                                        ? Icons.visibility 
-                                        : Icons.visibility_off,
+                                      _isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
                                       color: Colors.yellow.shade700,
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        _isPasswordVisible = !_isPasswordVisible;
+                                        _isPasswordVisible =
+                                            !_isPasswordVisible;
                                       });
                                     },
                                   ),
@@ -133,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                                   fillColor: Colors.grey.shade100,
                                 ),
                               ),
-                              
+
                               // Forgot Password
                               Align(
                                 alignment: Alignment.centerRight,
@@ -150,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              
+
                               // Login Button
                               SizedBox(height: 16),
                               ElevatedButton(
@@ -158,33 +164,78 @@ class _LoginPageState extends State<LoginPage> {
                                   String username = _usernameController.text;
                                   String password = _passwordController.text;
 
-                                  String baseUrl =
-                                      dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+                                  String baseUrl = dotenv.env['BASE_URL'] ??
+                                      "http://127.0.0.1:8000";
                                   String apiUrl = "$baseUrl/auth/login/";
 
-                                  final response = await http.post(
-                                    Uri.parse(apiUrl),
-                                    body: {
+                                  try {
+                                    final response =
+                                        await request.login(apiUrl, {
                                       'username': username,
                                       'password': password,
-                                    },
-                                  );
+                                    });
 
-                                  if (response.statusCode == 200) {
-                                    if (context.mounted) {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MyHomePage()),
-                                      );
+                                    // Ensure response is treated as a Map
+                                    final Map<String, dynamic> responseData =
+                                        response is Map
+                                            ? Map<String, dynamic>.from(
+                                                response)
+                                            : {};
+
+                                    if (request.loggedIn) {
+                                      // Safely access message and username
+                                      String message =
+                                          responseData['message']?.toString() ??
+                                              'Login successful';
+                                      String uname = responseData['username']
+                                              ?.toString() ??
+                                          username;
+
+                                      if (context.mounted) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MyHomePage()),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                          ..hideCurrentSnackBar()
+                                          ..showSnackBar(
+                                            SnackBar(
+                                                content: Text(
+                                                    "$message Selamat datang, $uname.")),
+                                          );
+                                      }
+                                    } else {
+                                      if (context.mounted) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Login Gagal'),
+                                            content: Text(responseData[
+                                                        'message']
+                                                    ?.toString() ??
+                                                'Invalid username or password'),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
                                     }
-                                  } else {
+                                  } catch (e) {
                                     if (context.mounted) {
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
-                                          title: const Text('Login Failed'),
-                                          content: Text('Invalid username or password'),
+                                          title: const Text('Login Error'),
+                                          content:
+                                              Text('An error occurred: $e'),
                                           actions: [
                                             TextButton(
                                               child: const Text('OK'),
@@ -218,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      
+
                       // Register Option
                       SizedBox(height: 24),
                       Center(
