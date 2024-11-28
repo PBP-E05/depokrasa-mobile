@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:depokrasa_mobile/shared/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -12,6 +13,7 @@ class MyHomePage extends StatelessWidget {
       body: const Center(
         child: Text('Welcome to the Home Page!'),
       ),
+      drawer: const LeftDrawer(),
     );
   }
 }
