@@ -23,16 +23,11 @@ class LeftDrawer extends StatelessWidget {
                   bottomRight: Radius.circular(20),
                 ),
               ),
-              child: const Center(
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              child: Center(
+                  child: Image.asset(
+                'images/depokrasa-logo.png',
+                fit: BoxFit.contain,
+              )),
             ),
 
             // Logout Button with fancy design
@@ -57,7 +52,8 @@ class LeftDrawer extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.yellow[700],
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
