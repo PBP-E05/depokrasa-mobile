@@ -5,9 +5,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:depokrasa_mobile/models/featured_news.dart';
+import 'package:depokrasa_mobile/models/user.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final User user;
+
+  const MyHomePage({super.key, required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -16,8 +19,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<FeaturedNews> featuredNewsList = [];
-  final CarouselSliderController _carouselController =
-      CarouselSliderController();
+  final CarouselSliderController _carouselController = CarouselSliderController();
+  bool isAdmin = false;
 
   @override
   void initState() {
@@ -36,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
         featuredNewsList =
             data.map((item) => FeaturedNews.fromJson(item, baseUrl)).toList();
       });
-
     } else {
       throw Exception('Failed to load featured news');
     }
@@ -52,6 +54,21 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (widget.user.isAdmin) // Conditionally show the Add News button
+              TextButton(
+                onPressed: () async {},
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(100, 50),
+                  backgroundColor: Colors.yellow.shade700,
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('Add News'),
+              ),
+            const SizedBox(height: 20),
             if (featuredNewsList.isNotEmpty)
               CarouselSlider.builder(
                 carouselController: _carouselController,
@@ -63,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   aspectRatio: 16 / 9,
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enableInfiniteScroll: true,
+                  autoPlayInterval: const Duration(seconds: 3),
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   viewportFraction: 0.8,
                 ),
