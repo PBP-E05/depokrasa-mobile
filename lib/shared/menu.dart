@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart';
+import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 
 class MyHomePage extends StatefulWidget {
   final User user;
@@ -56,7 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             if (widget.user.isAdmin) // Conditionally show the Add News button
               TextButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddNewsPage(user: widget.user)),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   minimumSize: const Size(100, 50),
