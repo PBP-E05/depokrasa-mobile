@@ -60,7 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddNewsPage(user: widget.user)),
+                    MaterialPageRoute(
+                      builder: (context) => AddNewsPage(
+                        user: widget.user,
+                        onNewsSubmitted: fetchFeaturedNews, // Pass the callback
+                      ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -85,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   autoPlay: true,
                   aspectRatio: 16 / 9,
                   autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
+                  enableInfiniteScroll: false, // Disable infinite scroll
                   autoPlayInterval: const Duration(seconds: 3),
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   viewportFraction: 0.8,

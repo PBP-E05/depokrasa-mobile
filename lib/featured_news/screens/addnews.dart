@@ -9,8 +9,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AddNewsPage extends StatefulWidget {
   final User user;
+  final VoidCallback onNewsSubmitted; // Add a callback
 
-  const AddNewsPage({Key? key, required this.user}) : super(key: key);
+  const AddNewsPage({Key? key, required this.user, required this.onNewsSubmitted}) : super(key: key);
 
   @override
   _AddNewsPageState createState() => _AddNewsPageState();
@@ -91,7 +92,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
       );
 
       if (response.statusCode == 200) {
-        // print('News submitted successfully');
+        widget.onNewsSubmitted(); // Call the callback
         _showSuccessDialog();
       } else {
         final responseData = jsonDecode(response.body);
