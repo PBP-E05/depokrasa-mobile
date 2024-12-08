@@ -1,4 +1,5 @@
 class FeaturedNews {
+  final String id;
   final String title;
   final String iconImage;
   final String grandTitle;
@@ -12,6 +13,7 @@ class FeaturedNews {
   final String updatedAt;
 
   FeaturedNews({
+    required this.id,
     required this.title,
     required this.iconImage,
     required this.grandTitle,
@@ -27,24 +29,24 @@ class FeaturedNews {
 
   factory FeaturedNews.fromJson(Map<String, dynamic> json, String baseUrl) {
     return FeaturedNews(
-      title: json['fields']['title'],
-      iconImage: '$baseUrl/${json['fields']['icon_image']}',
-      grandTitle: json['fields']['grand_title'],
-      content: json['fields']['content'],
-      author: json['fields']['author'],
-      grandImage: json['fields']['grand_image'].isNotEmpty
-          ? '$baseUrl/${json['fields']['grand_image']}'
-          : 'images/image1.jpg',
-      cookingTime: json['fields']['cooking_time'],
-      calories: json['fields']['calories'],
-      timeAdded: json['fields']['time_added'],
-      createdAt: json['fields']['created_at'],
-      updatedAt: json['fields']['updated_at'],
+      id: json['pk'] ?? '',
+      title: json['fields']['title'] ?? '',
+      iconImage: json['fields']['icon_image'] != null ? '$baseUrl/${json['fields']['icon_image']}' : '',
+      grandTitle: json['fields']['grand_title'] ?? '',
+      content: json['fields']['content'] ?? '',
+      author: json['fields']['author'] ?? '',
+      grandImage: json['fields']['grand_image'] != null ? '$baseUrl/${json['fields']['grand_image']}' : 'images/image1.jpg',
+      cookingTime: json['fields']['cooking_time'] ?? 0,
+      calories: json['fields']['calories'] ?? 0,
+      timeAdded: json['fields']['time_added'] ?? '',
+      createdAt: json['fields']['created_at'] ?? '',
+      updatedAt: json['fields']['updated_at'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'fields': {
         'title': title,
         'icon_image': iconImage,

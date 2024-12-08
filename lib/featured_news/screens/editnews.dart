@@ -6,35 +6,40 @@ import 'package:depokrasa_mobile/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:uuid/uuid.dart';
 
-class AddNewsPage extends StatefulWidget {
+class EditNewsPage extends StatefulWidget {
   final User user;
-  final VoidCallback onNewsSubmitted; // Add a callback
+  final FeaturedNews news;
+  final VoidCallback onNewsUpdated;
 
-  const AddNewsPage({Key? key, required this.user, required this.onNewsSubmitted}) : super(key: key);
+  const EditNewsPage({Key? key, required this.user, required this.news, required this.onNewsUpdated}) : super(key: key);
 
   @override
-  _AddNewsPageState createState() => _AddNewsPageState();
+  _EditNewsPageState createState() => _EditNewsPageState();
 }
 
-class _AddNewsPageState extends State<AddNewsPage> {
+class _EditNewsPageState extends State<EditNewsPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Controllers for text fields
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _grandTitleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
-  final TextEditingController _cookingTimeController = TextEditingController();
-  final TextEditingController _caloriesController = TextEditingController();
-  final TextEditingController _authorController = TextEditingController();
-  final TextEditingController _timeAddedController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _grandTitleController;
+  late TextEditingController _contentController;
+  late TextEditingController _cookingTimeController;
+  late TextEditingController _caloriesController;
+  late TextEditingController _authorController;
+  late TextEditingController _timeAddedController;
 
   @override
   void initState() {
     super.initState();
-    _authorController.text = widget.user.username;
-    _timeAddedController.text = DateTime.now().toIso8601String();
+    _titleController = TextEditingController(text: widget.news.title);
+    _grandTitleController = TextEditingController(text: widget.news.grandTitle);
+    _contentController = TextEditingController(text: widget.news.content);
+    _cookingTimeController = TextEditingController(text: widget.news.cookingTime.toString());
+    _caloriesController = TextEditingController(text: widget.news.calories.toString());
+    _authorController = TextEditingController(text: widget.news.author);
+    _timeAddedController = TextEditingController(text: widget.news.timeAdded);
   }
 
   // Image files
@@ -59,27 +64,25 @@ class _AddNewsPageState extends State<AddNewsPage> {
     }
   }
 
-  // Submit news
   void _submitNews() async {
     if (_formKey.currentState!.validate()) {
-      // Create FeaturedNews object
       final news = FeaturedNews(
-        id: Uuid().v4(), // Add this line
+        id: widget.news.id,
         title: _titleController.text.trim(),
-        iconImage: _iconImage?.path ?? '',
+        iconImage: _iconImage?.path ?? widget.news.iconImage,
         grandTitle: _grandTitleController.text.trim(),
         content: _contentController.text.trim(),
         author: widget.user.username,
-        grandImage: _grandImage?.path ?? '',
+        grandImage: _grandImage?.path ?? widget.news.grandImage,
         cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
         calories: int.tryParse(_caloriesController.text) ?? 0,
-        timeAdded: DateTime.now().toIso8601String(),
-        createdAt: DateTime.now().toIso8601String(),
+        timeAdded: widget.news.timeAdded,
+        createdAt: widget.news.createdAt,
         updatedAt: DateTime.now().toIso8601String(),
       );
 
       String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
-      String apiUrl = "$baseUrl/create-news/";
+      String apiUrl = "$baseUrl/edit-news/${news.id}/";
 
       Map<String, dynamic> newsJson = news.toJson();
       
@@ -94,11 +97,10 @@ class _AddNewsPageState extends State<AddNewsPage> {
       );
 
       if (response.statusCode == 200) {
-        widget.onNewsSubmitted(); // Call the callback
+        widget.onNewsUpdated(); // Call the callback
         _showSuccessDialog();
       } else {
         final responseData = jsonDecode(response.body);
-        // print('Failed to submit news: ${responseData['message']}');
         _showErrorDialog(responseData['message']);
       }
     }
@@ -109,8 +111,8 @@ class _AddNewsPageState extends State<AddNewsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('News Added Successfully'),
-        content: const Text('Your news has been submitted.'),
+        title: const Text('News Updated Successfully'),
+        content: const Text('Your news has been updated.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -147,7 +149,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add News'),
+        title: const Text('Edit News'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -315,7 +317,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   ),
                 ),
                 child: const Text(
-                  'Submit News',
+                  'Update News',
                   style: TextStyle(fontSize: 16),
                 ),
               ),

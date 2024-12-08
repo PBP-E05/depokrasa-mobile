@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart';
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
+import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
 
 class MyHomePage extends StatefulWidget {
   final User user;
@@ -37,8 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
-        featuredNewsList =
-            data.map((item) => FeaturedNews.fromJson(item, baseUrl)).toList();
+        featuredNewsList = data.map((item) {
+          // Ensure all fields are properly checked for null values
+          return FeaturedNews.fromJson(item ?? {}, baseUrl);
+        }).toList();
       });
     } else {
       throw Exception('Failed to load featured news');
@@ -97,31 +100,50 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 itemBuilder: (context, index, realIndex) {
                   final news = featuredNewsList[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 3,
-                          blurRadius: 10,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: news.grandImage.startsWith('images')
-                          ? Image.asset(
-                              news.grandImage,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              news.grandImage,
-                              fit: BoxFit.cover,
+                  return Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset: const Offset(0, 6),
                             ),
-                    ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            'images/image1.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      if (widget.user.isAdmin)
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.white),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditNewsPage(
+                                    user: widget.user,
+                                    news: news,
+                                    onNewsUpdated: fetchFeaturedNews,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                    ],
                   );
                 },
               )
