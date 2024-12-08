@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depokrasa_mobile/shared/menu.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:depokrasa_mobile/models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -191,12 +192,14 @@ class _LoginPageState extends State<LoginPage> {
                                               ?.toString() ??
                                           username;
 
+                                      User user = User.fromJson(responseData);
+
                                       if (context.mounted) {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  MyHomePage()),
+                                                  MyHomePage(user: user)),
                                         );
                                         ScaffoldMessenger.of(context)
                                           ..hideCurrentSnackBar()
