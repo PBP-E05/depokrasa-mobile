@@ -39,12 +39,26 @@ class _MyHomePageState extends State<MyHomePage> {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
         featuredNewsList = data.map((item) {
-          // Ensure all fields are properly checked for null values
           return FeaturedNews.fromJson(item ?? {}, baseUrl);
         }).toList();
       });
     } else {
       throw Exception('Failed to load featured news');
+    }
+  }
+
+  Future<void> deleteNews(String newsId) async {
+    String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+    String apiUrl = "$baseUrl/delete-news/$newsId/";
+    final response = await http.delete(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        featuredNewsList.removeWhere((news) => news.id == newsId);
+      });
+      // fetchFeaturedNews();
+    } else {
+      throw Exception('Failed to delete news');
     }
   }
 
@@ -58,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (widget.user.isAdmin) // Conditionally show the Add News button
+            if (widget.user.isAdmin)
               TextButton(
                 onPressed: () async {
                   Navigator.push(
@@ -93,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   autoPlay: true,
                   aspectRatio: 16 / 9,
                   autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: false, // Disable infinite scroll
+                  enableInfiniteScroll: false,
                   autoPlayInterval: const Duration(seconds: 3),
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   viewportFraction: 0.8,
@@ -127,20 +141,30 @@ class _MyHomePageState extends State<MyHomePage> {
                         Positioned(
                           top: 10,
                           right: 10,
-                          child: IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditNewsPage(
-                                    user: widget.user,
-                                    news: news,
-                                    onNewsUpdated: fetchFeaturedNews,
-                                  ),
-                                ),
-                              );
-                            },
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.white),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditNewsPage(
+                                        user: widget.user,
+                                        news: news,
+                                        onNewsUpdated: fetchFeaturedNews,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.white),
+                                onPressed: () async {
+                                  await deleteNews(news.id);
+                                },
+                              ),
+                            ],
                           ),
                         ),
                     ],

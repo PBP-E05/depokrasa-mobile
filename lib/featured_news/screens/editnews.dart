@@ -136,7 +136,7 @@ class _EditNewsPageState extends State<EditNewsPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop();// Close dialog
             },
             child: const Text('OK'),
           ),
