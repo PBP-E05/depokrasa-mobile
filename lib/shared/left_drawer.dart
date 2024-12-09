@@ -18,21 +18,16 @@ class LeftDrawer extends StatelessWidget {
             DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.yellow[300],
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
               ),
               child: Center(
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+                  child: Image.asset(
+                'images/depokrasa-logo.png',
+                fit: BoxFit.contain,
+              )),
             ),
 
             // Logout Button with fancy design
@@ -41,14 +36,13 @@ class LeftDrawer extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Implement logout logic
                   _showLogoutConfirmation(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.logout,
                   color: Colors.white,
                 ),
-                label: Text(
+                label: const Text(
                   'Logout',
                   style: TextStyle(
                     color: Colors.white,
@@ -58,7 +52,8 @@ class LeftDrawer extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.yellow[700],
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -80,14 +75,14 @@ class LeftDrawer extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.yellow[100],
-          title: Text(
+          title: const Text(
             'Logout',
             style: TextStyle(
               color: Colors.black87,
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: Text(
+          content: const Text(
             'Are you sure you want to logout?',
             style: TextStyle(color: Colors.black87),
           ),
@@ -106,9 +101,8 @@ class LeftDrawer extends StatelessWidget {
                 backgroundColor: Colors.yellow[700],
                 foregroundColor: Colors.white,
               ),
-              child: Text('Logout'),
+              child: const Text('Logout'),
               onPressed: () async {
-                // TODO: Add actual logout logic here
                 String baseUrl =
                     dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
                 String apiUrl = "$baseUrl/auth/logout/";
@@ -135,31 +129,11 @@ class LeftDrawer extends StatelessWidget {
                     );
                   }
                 }
-
-                Navigator.of(context).pop();
-                // For example: Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
               },
             ),
           ],
         );
       },
-    );
-  }
-}
-
-// Example usage in a Scaffold
-class ExampleScaffoldWithDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Yellow Drawer Example'),
-        backgroundColor: Colors.yellow[300],
-      ),
-      drawer: LeftDrawer(),
-      body: Center(
-        child: Text('Swipe or tap menu icon to open drawer'),
-      ),
     );
   }
 }
