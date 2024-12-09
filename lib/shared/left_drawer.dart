@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:depokrasa_mobile/authentication/screens/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -29,7 +30,16 @@ class LeftDrawer extends StatelessWidget {
                 fit: BoxFit.contain,
               )),
             ),
-
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfileScreen()),
+                );
+              },
+            ),
             // Logout Button with fancy design
             Padding(
               padding:
