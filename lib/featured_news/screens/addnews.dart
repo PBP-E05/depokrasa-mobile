@@ -83,7 +83,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
 
       Map<String, dynamic> newsJson = news.toJson();
       
-      String jsonPayload = jsonEncode(newsJson);
+      String jsonPayload = jsonEncode(newsJson);  
 
       final response = await http.post(
         Uri.parse(apiUrl),
