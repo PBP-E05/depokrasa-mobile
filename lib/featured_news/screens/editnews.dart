@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:depokrasa_mobile/models/featured_news.dart';
-import 'package:depokrasa_mobile/models/user.dart';
+import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 class EditNewsPage extends StatefulWidget {
-  final User user;
+  final depokrasa_user.User user;
   final FeaturedNews news;
   final VoidCallback onNewsUpdated;
 
@@ -64,20 +66,40 @@ class _EditNewsPageState extends State<EditNewsPage> {
     }
   }
 
+  Future<String?> _uploadImage(File image, String path) async {
+    final supabase = Supabase.instance.client;
+    try {
+      final response = await supabase.storage.from('images').upload(path, image);
+      final publicUrl = supabase.storage.from('images').getPublicUrl(path);
+      return publicUrl;
+    } catch (error) {
+      print('Error uploading image: $error');
+      return null;
+    }
+  }
+
   void _submitNews() async {
     if (_formKey.currentState!.validate()) {
-      final news = FeaturedNews(
-        id: widget.news.id,
+      String? iconImageUrl;
+      String? grandImageUrl;
+
+      if (_iconImage != null) {
+        iconImageUrl = await _uploadImage(_iconImage!, 'icons/${widget.news.id}.png');
+      }
+
+      if (_grandImage != null) {
+        grandImageUrl = await _uploadImage(_grandImage!, 'grands/${widget.news.id}.png');
+      }
+
+      final news = widget.news.copyWith(
         title: _titleController.text.trim(),
-        iconImage: _iconImage?.path ?? widget.news.iconImage,
+        iconImage: iconImageUrl ?? widget.news.iconImage,
         grandTitle: _grandTitleController.text.trim(),
         content: _contentController.text.trim(),
         author: widget.user.username,
-        grandImage: _grandImage?.path ?? widget.news.grandImage,
+        grandImage: grandImageUrl ?? widget.news.grandImage,
         cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
         calories: int.tryParse(_caloriesController.text) ?? 0,
-        timeAdded: widget.news.timeAdded,
-        createdAt: widget.news.createdAt,
         updatedAt: DateTime.now().toIso8601String(),
       );
 

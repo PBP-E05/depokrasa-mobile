@@ -11,6 +11,8 @@ class FeaturedNews {
   final String timeAdded;
   final String createdAt;
   final String updatedAt;
+  String? grandImageUrl;
+  String? iconImageUrl;
 
   FeaturedNews({
     required this.id,
@@ -25,6 +27,8 @@ class FeaturedNews {
     required this.timeAdded,
     required this.createdAt,
     required this.updatedAt,
+    this.grandImageUrl,
+    this.iconImageUrl,
   });
 
   factory FeaturedNews.fromJson(Map<String, dynamic> json, String baseUrl) {
@@ -41,6 +45,8 @@ class FeaturedNews {
       timeAdded: json['fields']['time_added'] ?? '',
       createdAt: json['fields']['created_at'] ?? '',
       updatedAt: json['fields']['updated_at'] ?? '',
+      grandImageUrl: json['grand_image_url'] ?? '',
+      iconImageUrl: json['icon_image_url'] ?? '',
     );
   }
 
@@ -60,6 +66,42 @@ class FeaturedNews {
         'created_at': createdAt,
         'updated_at': updatedAt,
       },
+      'grand_image_url': grandImageUrl,
+      'icon_image_url': iconImageUrl,
     };
+  }
+
+  FeaturedNews copyWith({
+    String? id,
+    String? title,
+    String? iconImage,
+    String? grandTitle,
+    String? content,
+    String? author,
+    String? grandImage,
+    int? cookingTime,
+    int? calories,
+    String? timeAdded,
+    String? createdAt,
+    String? updatedAt,
+    String? grandImageUrl,
+    String? iconImageUrl,
+  }) {
+    return FeaturedNews(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      iconImage: iconImage ?? this.iconImage,
+      grandTitle: grandTitle ?? this.grandTitle,
+      content: content ?? this.content,
+      author: author ?? this.author,
+      grandImage: grandImage ?? this.grandImage,
+      cookingTime: cookingTime ?? this.cookingTime,
+      calories: calories ?? this.calories,
+      timeAdded: timeAdded ?? this.timeAdded,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      grandImageUrl: grandImageUrl ?? this.grandImageUrl,
+      iconImageUrl: iconImageUrl ?? this.iconImageUrl,
+    );
   }
 }
