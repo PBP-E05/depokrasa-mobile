@@ -42,61 +42,63 @@ class _AddNewsPageState extends State<AddNewsPage> {
   }
 
   // Image files
-  File? _iconImage;
-  File? _grandImage;
+  XFile? _iconImage;
+  XFile? _grandImage;
 
   // Image picker
   final ImagePicker _picker = ImagePicker();
 
-  // Pick image from gallery
+  // Pick image from gallery and upload immediately
   Future<void> _pickImage(bool isIconImage) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      final imageUrl = await _uploadImage(pickedFile, isIconImage ? 'icons/${Uuid().v4()}.png' : 'grands/${Uuid().v4()}.png');
+
       setState(() {
         if (isIconImage) {
-          _iconImage = File(pickedFile.path);
+          _iconImage = imageUrl != null ? pickedFile : null;
         } else {
-          _grandImage = File(pickedFile.path);
+          _grandImage = imageUrl != null ? pickedFile : null;
         }
       });
     }
   }
 
-  Future<String?> _uploadImage(File image, String path) async {
-  try {
-    // Ensure Supabase is properly initialized
-    if (Supabase.instance.client == null) {
-      print('Supabase client is not initialized');
+  Future<String?> _uploadImage(XFile pickedFile, String path) async {
+    try {
+      // Ensure Supabase is properly initialized
+      final supabaseClient = Supabase.instance.client;
+      if (supabaseClient == null) {
+        print('Supabase client is not initialized');
+        return null;
+      }
+
+      final fileBytes = await pickedFile.readAsBytes();
+
+      final uploadResponse = await supabaseClient.storage
+          .from('images')
+          .uploadBinary(
+            path, 
+            fileBytes,
+            fileOptions: const FileOptions(
+              contentType: 'image/png',
+              upsert: true
+            ),
+          );
+
+      final publicUrl = supabaseClient.storage
+          .from('images')
+          .getPublicUrl(path);
+
+      return publicUrl;
+    } catch (error) {
+      print('Upload Error Details:');
+      print(error);
+      print('Error Type: ${error.runtimeType}');
       return null;
     }
-
-    final supabaseClient = Supabase.instance.client;
-    final bytes = await image.readAsBytes();
-
-    final uploadResponse = await supabaseClient.storage
-        .from('images')
-        .uploadBinary(
-          path, 
-          bytes,
-          fileOptions: FileOptions(
-            contentType: 'image/png',
-            upsert: true
-          ),
-        );
-
-    final publicUrl = supabaseClient.storage
-        .from('images')
-        .getPublicUrl(path);
-
-    return publicUrl;
-  } catch (error) {
-    print('Upload Error Details:');
-    print(error);
-    print('Error Type: ${error.runtimeType}');
-    return null;
   }
-}
 
   // Submit news
   void _submitNews() async {
@@ -117,12 +119,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
         updatedAt: DateTime.now().toIso8601String(),
       );
 
-      String? iconImageUrl;
       String? grandImageUrl;
-
-      if (_iconImage != null) {
-        iconImageUrl = await _uploadImage(_iconImage!, 'icons/${news.id}.png');
-      }
 
       if (_grandImage != null) {
         grandImageUrl =
@@ -130,7 +127,6 @@ class _AddNewsPageState extends State<AddNewsPage> {
       }
 
       final updatedNews = news.copyWith(
-        iconImage: iconImageUrl ?? '',
         grandImage: grandImageUrl ?? '',
       );
 
@@ -384,7 +380,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
   // Reusable image picker card
   Widget _buildImagePickerCard({
     required String title,
-    required File? image,
+    required XFile? image,
     required VoidCallback onPickImage,
   }) {
     return Card(
@@ -407,7 +403,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   borderRadius: BorderRadius.circular(10),
                   image: image != null
                       ? DecorationImage(
-                          image: FileImage(image),
+                          image: FileImage(File(image.path)),
                           fit: BoxFit.cover,
                         )
                       : null,
