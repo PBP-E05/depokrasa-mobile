@@ -11,8 +11,6 @@ class FeaturedNews {
   final String timeAdded;
   final String createdAt;
   final String updatedAt;
-  String? grandImageUrl;
-  String? iconImageUrl;
 
   FeaturedNews({
     required this.id,
@@ -27,26 +25,22 @@ class FeaturedNews {
     required this.timeAdded,
     required this.createdAt,
     required this.updatedAt,
-    this.grandImageUrl,
-    this.iconImageUrl,
   });
 
-  factory FeaturedNews.fromJson(Map<String, dynamic> json, String baseUrl) {
+  factory FeaturedNews.fromJson(Map<String, dynamic> json) {
     return FeaturedNews(
       id: json['pk'] ?? '',
       title: json['fields']['title'] ?? '',
-      iconImage: json['fields']['icon_image'] != null ? '$baseUrl/${json['fields']['icon_image']}' : '',
+      iconImage: json['fields']['icon_image'] ?? '',
       grandTitle: json['fields']['grand_title'] ?? '',
       content: json['fields']['content'] ?? '',
       author: json['fields']['author'] ?? '',
-      grandImage: json['fields']['grand_image'] != null ? '$baseUrl/${json['fields']['grand_image']}' : 'images/image1.jpg',
+      grandImage: json['fields']['grand_image'] ?? '',
       cookingTime: json['fields']['cooking_time'] ?? 0,
       calories: json['fields']['calories'] ?? 0,
       timeAdded: json['fields']['time_added'] ?? '',
       createdAt: json['fields']['created_at'] ?? '',
       updatedAt: json['fields']['updated_at'] ?? '',
-      grandImageUrl: json['grand_image_url'] ?? '',
-      iconImageUrl: json['icon_image_url'] ?? '',
     );
   }
 
@@ -66,8 +60,6 @@ class FeaturedNews {
         'created_at': createdAt,
         'updated_at': updatedAt,
       },
-      'grand_image_url': grandImageUrl,
-      'icon_image_url': iconImageUrl,
     };
   }
 
@@ -84,8 +76,6 @@ class FeaturedNews {
     String? timeAdded,
     String? createdAt,
     String? updatedAt,
-    String? grandImageUrl,
-    String? iconImageUrl,
   }) {
     return FeaturedNews(
       id: id ?? this.id,
@@ -100,8 +90,6 @@ class FeaturedNews {
       timeAdded: timeAdded ?? this.timeAdded,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      grandImageUrl: grandImageUrl ?? this.grandImageUrl,
-      iconImageUrl: iconImageUrl ?? this.iconImageUrl,
     );
   }
 }

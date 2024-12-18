@@ -45,11 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
           featuredNewsList = data.map((item) {
-            return FeaturedNews.fromJson(item ?? {}, baseUrl);
+            return FeaturedNews.fromJson(item ?? {});
           }).toList();
           isLoading = false;
         });
-        await _fetchImages();
       } else {
         throw Exception('Failed to load featured news');
       }
@@ -62,49 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
   }
-
-  Future<void> _fetchImages() async {
-  final supabase = Supabase.instance.client;
-  const defaultImageUrl = 'https://ibuqzrjrzshvnuahjjdm.supabase.co/storage/v1/object/public/images/Placeholder.jpg';
-
-  for (var news in featuredNewsList) {
-    if (news.iconImage.isNotEmpty) {
-      try {
-        final response = await supabase.storage.from('images').download(news.iconImage);
-        setState(() {
-          news.iconImageUrl = String.fromCharCodes(response);
-        });
-      } catch (error) {
-        if (error is StorageException && error.statusCode == 404) {
-          setState(() {
-            news.iconImageUrl = defaultImageUrl;
-          });
-          print('Icon image not found: ${news.iconImage}');
-        } else {
-          print('Error downloading icon image: $error');
-        }
-      }
-    }
-
-    if (news.grandImage.isNotEmpty) {
-      try {
-        final response = await supabase.storage.from('images').download(news.grandImage);
-        setState(() {
-          news.grandImageUrl = String.fromCharCodes(response);
-        });
-      } catch (error) {
-        setState(() {
-          news.grandImageUrl = defaultImageUrl;
-        });
-        if (error is StorageException && error.statusCode == 404) {
-          print('Grand image not found: ${news.grandImage}');
-        } else {
-          print('Error downloading grand image: $error');
-        }
-      }
-    }
-  }
-}
 
   Future<void> deleteNews(String newsId) async {
     String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
@@ -286,9 +242,9 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image Section
-              news.grandImageUrl != null
+              news.grandImage.isNotEmpty
                   ? Image.network(
-                      news.grandImageUrl!,
+                      news.grandImage,
                       fit: BoxFit.cover,
                       height: 250,
                       width: double.infinity,
