@@ -19,11 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) {
-        CookieRequest request = CookieRequest();
-        return request;
-      },
+    return MultiProvider(
+      providers: [
+        Provider<CookieRequest>(
+          create: (_) => CookieRequest(),
+        ),
+        Provider<SupabaseClient>(
+          create: (_) => Supabase.instance.client,
+        ),
+      ],
       child: MaterialApp(
         title: 'DepokRasa',
         theme: ThemeData(

@@ -5,12 +5,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:depokrasa_mobile/models/featured_news.dart';
-import 'package:depokrasa_mobile/models/user.dart';
+import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
-  final User user;
+  final depokrasa_user.User user;
 
   const MyHomePage({super.key, required this.user});
 
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }).toList();
           isLoading = false;
         });
+        await _fetchImages();
       } else {
         throw Exception('Failed to load featured news');
       }
@@ -60,6 +62,49 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
   }
+
+  Future<void> _fetchImages() async {
+  final supabase = Supabase.instance.client;
+  const defaultImageUrl = 'https://ibuqzrjrzshvnuahjjdm.supabase.co/storage/v1/object/public/images/Placeholder.jpg';
+
+  for (var news in featuredNewsList) {
+    if (news.iconImage.isNotEmpty) {
+      try {
+        final response = await supabase.storage.from('images').download(news.iconImage);
+        setState(() {
+          news.iconImageUrl = String.fromCharCodes(response);
+        });
+      } catch (error) {
+        if (error is StorageException && error.statusCode == 404) {
+          setState(() {
+            news.iconImageUrl = defaultImageUrl;
+          });
+          print('Icon image not found: ${news.iconImage}');
+        } else {
+          print('Error downloading icon image: $error');
+        }
+      }
+    }
+
+    if (news.grandImage.isNotEmpty) {
+      try {
+        final response = await supabase.storage.from('images').download(news.grandImage);
+        setState(() {
+          news.grandImageUrl = String.fromCharCodes(response);
+        });
+      } catch (error) {
+        setState(() {
+          news.grandImageUrl = defaultImageUrl;
+        });
+        if (error is StorageException && error.statusCode == 404) {
+          print('Grand image not found: ${news.grandImage}');
+        } else {
+          print('Error downloading grand image: $error');
+        }
+      }
+    }
+  }
+}
 
   Future<void> deleteNews(String newsId) async {
     String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
@@ -241,20 +286,19 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image Section
-              Image.network(
-                news.grandImage,
-                fit: BoxFit.cover,
-                height: 250,
-                width: double.infinity,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'images/image1.jpg',
-                    fit: BoxFit.cover,
-                    height: 250,
-                    width: double.infinity,
-                  );
-                },
-              ),
+              news.grandImageUrl != null
+                  ? Image.network(
+                      news.grandImageUrl!,
+                      fit: BoxFit.cover,
+                      height: 250,
+                      width: double.infinity,
+                    )
+                  : Image.asset(
+                      'images/image1.jpg',
+                      fit: BoxFit.cover,
+                      height: 250,
+                      width: double.infinity,
+                    ),
 
               // Content Section
               Flexible(
@@ -334,6 +378,35 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
+
+                        // Edit and Delete Buttons for Admin
+                        if (widget.user.isAdmin)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditNewsPage(
+                                        user: widget.user,
+                                        news: news,
+                                        onNewsUpdated: fetchFeaturedNews,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  _showDeleteConfirmationDialog(news.id);
+                                },
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -342,6 +415,31 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(String newsId) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete News'),
+        content: const Text('Are you sure you want to delete this news article?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              deleteNews(newsId);
+            },
+            child: const Text('Delete'),
+          ),
+        ],
       ),
     );
   }
