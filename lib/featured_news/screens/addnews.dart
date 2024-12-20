@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:depokrasa_mobile/models/featured_news.dart';
-import 'package:depokrasa_mobile/models/user.dart';
+import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:uuid/uuid.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AddNewsPage extends StatefulWidget {
-  final User user;
+  final depokrasa_user.User user;
   final VoidCallback onNewsSubmitted; // Add a callback
 
-  const AddNewsPage({Key? key, required this.user, required this.onNewsSubmitted}) : super(key: key);
+  const AddNewsPage(
+      {Key? key, required this.user, required this.onNewsSubmitted})
+      : super(key: key);
 
   @override
   _AddNewsPageState createState() => _AddNewsPageState();
@@ -38,24 +42,61 @@ class _AddNewsPageState extends State<AddNewsPage> {
   }
 
   // Image files
-  File? _iconImage;
-  File? _grandImage;
+  XFile? _iconImage;
+  XFile? _grandImage;
 
   // Image picker
   final ImagePicker _picker = ImagePicker();
 
-  // Pick image from gallery
+  // Pick image from gallery and upload immediately
   Future<void> _pickImage(bool isIconImage) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      final imageUrl = await _uploadImage(pickedFile, isIconImage ? 'icons/${Uuid().v4()}.png' : 'grands/${Uuid().v4()}.png');
+
       setState(() {
         if (isIconImage) {
-          _iconImage = File(pickedFile.path);
+          _iconImage = imageUrl != null ? pickedFile : null;
         } else {
-          _grandImage = File(pickedFile.path);
+          _grandImage = imageUrl != null ? pickedFile : null;
         }
       });
+    }
+  }
+
+  Future<String?> _uploadImage(XFile pickedFile, String path) async {
+    try {
+      // Ensure Supabase is properly initialized
+      final supabaseClient = Supabase.instance.client;
+      if (supabaseClient == null) {
+        print('Supabase client is not initialized');
+        return null;
+      }
+
+      final fileBytes = await pickedFile.readAsBytes();
+
+      final uploadResponse = await supabaseClient.storage
+          .from('images')
+          .uploadBinary(
+            path, 
+            fileBytes,
+            fileOptions: const FileOptions(
+              contentType: 'image/png',
+              upsert: true
+            ),
+          );
+
+      final publicUrl = supabaseClient.storage
+          .from('images')
+          .getPublicUrl(path);
+
+      return publicUrl;
+    } catch (error) {
+      print('Upload Error Details:');
+      print(error);
+      print('Error Type: ${error.runtimeType}');
+      return null;
     }
   }
 
@@ -66,11 +107,11 @@ class _AddNewsPageState extends State<AddNewsPage> {
       final news = FeaturedNews(
         id: Uuid().v4(), // Add this line
         title: _titleController.text.trim(),
-        iconImage: _iconImage?.path ?? '',
+        iconImage: '',
         grandTitle: _grandTitleController.text.trim(),
         content: _contentController.text.trim(),
         author: widget.user.username,
-        grandImage: _grandImage?.path ?? '',
+        grandImage: '',
         cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
         calories: int.tryParse(_caloriesController.text) ?? 0,
         timeAdded: DateTime.now().toIso8601String(),
@@ -78,11 +119,22 @@ class _AddNewsPageState extends State<AddNewsPage> {
         updatedAt: DateTime.now().toIso8601String(),
       );
 
+      String? grandImageUrl;
+
+      if (_grandImage != null) {
+        grandImageUrl =
+            await _uploadImage(_grandImage!, 'grands/${news.id}.png');
+      }
+
+      final updatedNews = news.copyWith(
+        grandImage: grandImageUrl ?? '',
+      );
+
       String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
       String apiUrl = "$baseUrl/create-news/";
 
-      Map<String, dynamic> newsJson = news.toJson();
-      
+      Map<String, dynamic> newsJson = updatedNews.toJson();
+
       String jsonPayload = jsonEncode(newsJson);
 
       final response = await http.post(
@@ -98,7 +150,6 @@ class _AddNewsPageState extends State<AddNewsPage> {
         _showSuccessDialog();
       } else {
         final responseData = jsonDecode(response.body);
-        // print('Failed to submit news: ${responseData['message']}');
         _showErrorDialog(responseData['message']);
       }
     }
@@ -329,7 +380,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
   // Reusable image picker card
   Widget _buildImagePickerCard({
     required String title,
-    required File? image,
+    required XFile? image,
     required VoidCallback onPickImage,
   }) {
     return Card(
@@ -352,7 +403,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   borderRadius: BorderRadius.circular(10),
                   image: image != null
                       ? DecorationImage(
-                          image: FileImage(image),
+                          image: FileImage(File(image.path)),
                           fit: BoxFit.cover,
                         )
                       : null,
