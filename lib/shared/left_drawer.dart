@@ -1,3 +1,4 @@
+import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -40,6 +41,18 @@ class LeftDrawer extends StatelessWidget {
                 );
               },
             ),
+            ListTile(
+              title: const Text('Articles'),
+
+              onTap:() {
+                Navigator.pushReplacement(
+                  context, 
+                  MaterialPageRoute(
+                    builder:(context) => ArticlesPage(),
+                    ));
+              }
+            ),
+
             // Logout Button with fancy design
             Padding(
               padding:

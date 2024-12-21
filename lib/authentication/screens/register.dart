@@ -212,6 +212,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       String apiUrl = "$baseUrl/auth/register/";
 
                                       final response = await request.postJson(
+                                        //TODO: change url
+                                          //"http://127.0.0.1:8000/auth/register/",
                                           apiUrl,
                                           jsonEncode({
                                             'username': username,

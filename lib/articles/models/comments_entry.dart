@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 List<CommentEntry> commentEntryFromJson(String str) => List<CommentEntry>.from(json.decode(str).map((x) => CommentEntry.fromJson(x)));
 
 String commentEntryToJson(List<CommentEntry> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -7,7 +9,7 @@ String commentEntryToJson(List<CommentEntry> data) => json.encode(List<dynamic>.
 class CommentEntry {
     int id;
     String body;
-    DateTime createdOn;
+    String createdOn;
     Author author;
     int articleId;
 
@@ -19,18 +21,23 @@ class CommentEntry {
         required this.articleId,
     });
 
-    factory CommentEntry.fromJson(Map<String, dynamic> json) => CommentEntry(
-        id: json["id"],
-        body: json["body"],
-        createdOn: DateTime.parse(json["created_on"]),
-        author: Author.fromJson(json["author"]),
-        articleId: json["article_id"],
-    );
+    factory CommentEntry.fromJson(Map<String, dynamic> json){
+      DateFormat formatter = DateFormat('dd MMMM yy HH:mm');
+      
+
+      return CommentEntry(
+            id: json["id"],
+            body: json["body"],
+            createdOn: formatter.format(DateTime.parse(json["created_on"])),       
+            author: Author.fromJson(json["author"]),
+            articleId: json["article_id"],
+        );
+    } 
 
     Map<String, dynamic> toJson() => {
         "id": id,
         "body": body,
-        "created_on": createdOn.toIso8601String(),
+        "created_on": DateTime.parse(createdOn).toIso8601String(),
         "author": author.toJson(),
         "article_id": articleId,
     };
