@@ -106,16 +106,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddNewsPage(
-                              user: widget.user,
-                              onNewsSubmitted: fetchFeaturedNews,
+                      onPressed: () async {
+                        try {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddNewsPage(
+                                user: widget.user,
+                                onNewsSubmitted: fetchFeaturedNews,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                          if (result == true) {
+                            fetchFeaturedNews();
+                          }
+                        } catch (e) {
+                          print('Error navigating to AddNewsPage: $e');
+                        }
                       },
                       icon: const Icon(Icons.add),
                       label: const Text('Add New Article'),
@@ -189,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(user: widget.user),
     );
   }
 
@@ -248,6 +255,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       fit: BoxFit.cover,
                       height: 250,
                       width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'images/image1.jpg',
+                          fit: BoxFit.cover,
+                          height: 250,
+                          width: double.infinity,
+                        );
+                      },
                     )
                   : Image.asset(
                       'images/image1.jpg',
@@ -342,17 +357,24 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditNewsPage(
-                                        user: widget.user,
-                                        news: news,
-                                        onNewsUpdated: fetchFeaturedNews,
+                                onPressed: () async {
+                                  try {
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditNewsPage(
+                                          user: widget.user,
+                                          news: news,
+                                          onNewsUpdated: fetchFeaturedNews,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                    if (result == true) {
+                                      fetchFeaturedNews();
+                                    }
+                                  } catch (e) {
+                                    print('Error navigating to EditNewsPage: $e');
+                                  }
                                 },
                               ),
                               IconButton(

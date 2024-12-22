@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Untuk Uint8List
 import 'package:image_picker/image_picker.dart';
 import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 
 class AddMenuForm extends StatefulWidget {
-  const AddMenuForm({Key? key}) : super(key: key); // Remove user parameter
+  final depokrasa_user.User user; // Add user parameter
+
+  const AddMenuForm({Key? key, required this.user}) : super(key: key); // Add user parameter
 
   @override
   State<AddMenuForm> createState() => _AddMenuFormState();
@@ -46,7 +49,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const menu.DepokRasaHomePage(),
+                builder: (context) => menu.DepokRasaHomePage(user: widget.user), // Pass user parameter
               ),
             );
           },

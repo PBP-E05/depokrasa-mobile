@@ -1,8 +1,15 @@
 import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
+import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
+import 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class BottomNavBar extends StatefulWidget {
+  final depokrasa_user.User user; // Add user parameter
+
+  const BottomNavBar({Key? key, required this.user})
+      : super(key: key); // Add user parameter
+
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
@@ -14,18 +21,21 @@ class _BottomNavBarState extends State<BottomNavBar> {
   late PageController _pageController;
 
   // List of pages to navigate to
-  final List<Widget> _pages = [
-    DepokRasaHomePage(),
-    DepokRasaHomePage(),
-    DepokRasaHomePage(),
-    ArticlesPage(),
-    ArticlesPage(),
-  ];
+  late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentIndex); // Initialize PageController
+    _pageController =
+        PageController(initialPage: _currentIndex); // Initialize PageController
+    _pages = [
+      DepokRasaHomePage(user: widget.user), // Pass user parameter
+      DepokRasaHomePage(user: widget.user), // Pass user parameter
+      DepokRasaHomePage(user: widget.user), // Pass user parameter
+      ArticlesPage(),
+      UserProfileScreen(
+          user: widget.user), // Correctly navigate to UserProfileScreen
+    ];
   }
 
   @override
@@ -42,7 +52,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         controller: _pageController, // Pass the PageController here
         onPageChanged: (index) {
           setState(() {
-            _currentIndex = index; // Update the current index when the page changes
+            _currentIndex =
+                index; // Update the current index when the page changes
           });
         },
         children: _pages,

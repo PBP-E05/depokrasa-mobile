@@ -7,112 +7,64 @@ import 'package:depokrasa_mobile/models/user.dart';
 export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  final User user; // Add this line to define the user parameter
+  final User user;
 
-  const UserProfileScreen({Key? key, required this.user}) : super(key: key); // Update the constructor
+  const UserProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  int _currentIndex = 0;
+  final _formKey = GlobalKey<FormState>();
 
-  void _onNavBarTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
+  // Muted colors
+  final Color primaryColor = const Color(0xFFE99D4B);    // Muted orange
+  final Color textColor = const Color(0xFF333333);       // Dark gray
+  final Color subtleGray = const Color(0xFFF5F5F5);     // Very light gray
+  final Color borderColor = const Color(0xFFEEEEEE);     // Light gray
+  
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController profilePictureController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
 
   String username = '';
   String email = '';
-  String profilePictureUrl = '';
+  String firstName = '';
+  String lastName = '';
 
   Future<void> fetchUserProfile() async {
-    String baseUrl = dotenv.env['BASE_URL'] ?? 'http://127.0.0.1:8000';
-    String apiUrl = '$baseUrl/get-profile/';
-
-    final response = await http.get(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      setState(() {
-        username = data['username'];
-        email = data['email'];
-        profilePictureUrl = data['profile_picture'];
-        usernameController.text = username;
-        emailController.text = email;
-        profilePictureController.text = profilePictureUrl;
-      });
-    } else {
-      // Handle error
-    }
+    setState(() {
+      username = widget.user.username;
+      email = 'johndoe@pbp.com';
+      firstName = 'John';
+      lastName = 'Doe';
+      usernameController.text = username;
+      emailController.text = email;
+      firstNameController.text = firstName;
+      lastNameController.text = lastName;
+    });
   }
 
-  Future<void> updateUserProfile(String email, String profilePicture) async {
-    String baseUrl = dotenv.env['BASE_URL'] ?? 'http://127.0.0.1:8000';
-    String apiurl = '$baseUrl/update-profile/';
-
-    final response = await http.post(
-      Uri.parse(apiurl),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'email': email,
-        'profile_picture': profilePicture,
-      }),
+  Future<void> updateUserProfile(String email, String firstName, String lastName) async {
+    setState(() {
+      this.email = email;
+      this.firstName = firstName;
+      this.lastName = lastName;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Changes saved'),
+        backgroundColor: primaryColor,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
     );
-
-    if (response.statusCode == 200) {
-      // Handle success
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Profile updated successfully.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop(); // Return to previous screen
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Handle error
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Failed to update profile. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Stay on current screen
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 
   @override
@@ -124,72 +76,184 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('User Profile'),
-      ),
-      bottomNavigationBar: BottomNavBar(), // Pass the user parameter here
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
-              onChanged: (value) {
-                setState(() {
-                  username = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: profilePictureController,
-              decoration: const InputDecoration(labelText: 'Profile Picture URL'),
-              onChanged: (value) {
-                setState(() {
-                  profilePictureUrl = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: profilePictureUrl.isNotEmpty
-                  ? NetworkImage(profilePictureUrl)
-                  : const AssetImage('images/image1.jpg'),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              username,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              email,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to edit profile screen
-                Navigator.of(context).pop();
-              },
-              child: const Text('Edit Profile'),
-
-            ),
-          ],
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: textColor, size: 22),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Simple user identifier
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: subtleGray,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: primaryColor.withOpacity(0.1),
+                          radius: 20,
+                          child: Text(
+                            username.isNotEmpty ? username[0].toUpperCase() : '?',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          username,
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Form fields
+                  buildInputField(
+                    controller: firstNameController,
+                    label: 'First name',
+                  ),
+                  const SizedBox(height: 12),
+                  buildInputField(
+                    controller: lastNameController,
+                    label: 'Last name',
+                  ),
+                  const SizedBox(height: 12),
+                  buildInputField(
+                    controller: emailController,
+                    label: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Save button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          updateUserProfile(email, firstName, lastName);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildInputField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      style: TextStyle(
+        color: textColor,
+        fontSize: 15,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          color: textColor.withOpacity(0.7),
+          fontSize: 14,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: BorderSide(color: borderColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: BorderSide(color: primaryColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter $label';
+        }
+        if (label == 'Email' && !value.contains('@')) {
+          return 'Please enter a valid email';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        setState(() {
+          switch (label) {
+            case 'Email':
+              email = value;
+              break;
+            case 'First name':
+              firstName = value;
+              break;
+            case 'Last name':
+              lastName = value;
+              break;
+          }
+        });
+      },
     );
   }
 }

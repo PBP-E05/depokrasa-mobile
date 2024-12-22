@@ -18,7 +18,6 @@ class AddNewsPage extends StatefulWidget {
       {Key? key, required this.user, required this.onNewsSubmitted})
       : super(key: key);
 
-
   @override
   _AddNewsPageState createState() => _AddNewsPageState();
 }
@@ -54,7 +53,11 @@ class _AddNewsPageState extends State<AddNewsPage> {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      final imageUrl = await _uploadImage(pickedFile, isIconImage ? 'icons/${Uuid().v4()}.png' : 'grands/${Uuid().v4()}.png');
+      final imageUrl = await _uploadImage(
+          pickedFile,
+          isIconImage
+              ? 'icons/${Uuid().v4()}.png'
+              : 'grands/${Uuid().v4()}.png');
 
       setState(() {
         if (isIconImage) {
@@ -76,23 +79,18 @@ class _AddNewsPageState extends State<AddNewsPage> {
         return null;
       }
 
-
       final fileBytes = await pickedFile.readAsBytes();
 
-      final uploadResponse = await supabaseClient.storage
-          .from('images')
-          .uploadBinary(
-            path, 
-            fileBytes,
-            fileOptions: const FileOptions(
-              contentType: 'image/png',
-              upsert: true
-            ),
-          );
+      final uploadResponse =
+          await supabaseClient.storage.from('images').uploadBinary(
+                path,
+                fileBytes,
+                fileOptions:
+                    const FileOptions(contentType: 'image/png', upsert: true),
+              );
 
-      final publicUrl = supabaseClient.storage
-          .from('images')
-          .getPublicUrl(path);
+      final publicUrl =
+          supabaseClient.storage.from('images').getPublicUrl(path);
 
       return publicUrl;
     } catch (error) {
@@ -106,54 +104,59 @@ class _AddNewsPageState extends State<AddNewsPage> {
   // Submit news
   void _submitNews() async {
     if (_formKey.currentState!.validate()) {
-      // Create FeaturedNews object
-      final news = FeaturedNews(
-        id: const Uuid().v4(), // Add this line
-        title: _titleController.text.trim(),
-        iconImage: '',
-        grandTitle: _grandTitleController.text.trim(),
-        content: _contentController.text.trim(),
-        author: widget.user.username,
-        grandImage: '',
-        cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
-        calories: int.tryParse(_caloriesController.text) ?? 0,
-        timeAdded: DateTime.now().toIso8601String(),
-        createdAt: DateTime.now().toIso8601String(),
-        updatedAt: DateTime.now().toIso8601String(),
-      );
+      try {
+        // Create FeaturedNews object
+        final news = FeaturedNews(
+          id: const Uuid().v4(), // Add this line
+          title: _titleController.text.trim(),
+          iconImage: '',
+          grandTitle: _grandTitleController.text.trim(),
+          content: _contentController.text.trim(),
+          author: widget.user.username,
+          grandImage: '',
+          cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
+          calories: int.tryParse(_caloriesController.text) ?? 0,
+          timeAdded: DateTime.now().toIso8601String(),
+          createdAt: DateTime.now().toIso8601String(),
+          updatedAt: DateTime.now().toIso8601String(),
+        );
 
-      String? grandImageUrl;
+        String? grandImageUrl;
 
-      if (_grandImage != null) {
-        grandImageUrl =
-            await _uploadImage(_grandImage!, 'grands/${news.id}.png');
-      }
+        if (_grandImage != null) {
+          grandImageUrl =
+              await _uploadImage(_grandImage!, 'grands/${news.id}.png');
+        }
 
-      final updatedNews = news.copyWith(
-        grandImage: grandImageUrl ?? '',
-      );
+        final updatedNews = news.copyWith(
+          grandImage: grandImageUrl ?? '',
+        );
 
-      String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
-      String apiUrl = "$baseUrl/create-news/";
+        String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+        String apiUrl = "$baseUrl/create-news/";
 
-      Map<String, dynamic> newsJson = updatedNews.toJson();
+        Map<String, dynamic> newsJson = updatedNews.toJson();
 
-      String jsonPayload = jsonEncode(newsJson);
+        String jsonPayload = jsonEncode(newsJson);
 
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonPayload,
-      );
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonPayload,
+        );
 
-      if (response.statusCode == 200) {
-        widget.onNewsSubmitted(); // Call the callback
-        _showSuccessDialog();
-      } else {
-        final responseData = jsonDecode(response.body);
-        _showErrorDialog(responseData['message']);
+        if (response.statusCode == 200) {
+          widget.onNewsSubmitted(); // Call the callback
+          _showSuccessDialog();
+        } else {
+          final responseData = jsonDecode(response.body);
+          _showErrorDialog(responseData['message']);
+        }
+      } catch (e) {
+        print('Error submitting news: $e');
+        _showErrorDialog('An unexpected error occurred. Please try again.');
       }
     }
   }
@@ -162,14 +165,17 @@ class _AddNewsPageState extends State<AddNewsPage> {
   void _showSuccessDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('News Added Successfully'),
         content: const Text('Your news has been submitted.'),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-              Navigator.of(context).pop(); // Return to previous screen
+              // Close the dialog
+              Navigator.of(context).pop();
+              // Return to previous screen with success result
+              Navigator.of(context).pop(true);
             },
             child: const Text('OK'),
           ),

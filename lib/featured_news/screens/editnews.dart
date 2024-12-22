@@ -80,50 +80,55 @@ class _EditNewsPageState extends State<EditNewsPage> {
 
   void _submitNews() async {
     if (_formKey.currentState!.validate()) {
-      String? iconImageUrl;
-      String? grandImageUrl;
+      try {
+        String? iconImageUrl;
+        String? grandImageUrl;
 
-      if (_iconImage != null) {
-        iconImageUrl = await _uploadImage(_iconImage!, 'icons/${widget.news.id}.png');
-      }
+        if (_iconImage != null) {
+          iconImageUrl = await _uploadImage(_iconImage!, 'icons/${widget.news.id}.png');
+        }
 
-      if (_grandImage != null) {
-        grandImageUrl = await _uploadImage(_grandImage!, 'grands/${widget.news.id}.png');
-      }
+        if (_grandImage != null) {
+          grandImageUrl = await _uploadImage(_grandImage!, 'grands/${widget.news.id}.png');
+        }
 
-      final news = widget.news.copyWith(
-        title: _titleController.text.trim(),
-        iconImage: iconImageUrl ?? widget.news.iconImage,
-        grandTitle: _grandTitleController.text.trim(),
-        content: _contentController.text.trim(),
-        author: widget.user.username,
-        grandImage: grandImageUrl ?? widget.news.grandImage,
-        cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
-        calories: int.tryParse(_caloriesController.text) ?? 0,
-        updatedAt: DateTime.now().toIso8601String(),
-      );
+        final news = widget.news.copyWith(
+          title: _titleController.text.trim(),
+          iconImage: iconImageUrl ?? widget.news.iconImage,
+          grandTitle: _grandTitleController.text.trim(),
+          content: _contentController.text.trim(),
+          author: widget.user.username,
+          grandImage: grandImageUrl ?? widget.news.grandImage,
+          cookingTime: int.tryParse(_cookingTimeController.text) ?? 0,
+          calories: int.tryParse(_caloriesController.text) ?? 0,
+          updatedAt: DateTime.now().toIso8601String(),
+        );
 
-      String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
-      String apiUrl = "$baseUrl/edit-news/${news.id}/";
+        String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+        String apiUrl = "$baseUrl/edit-news/${news.id}/";
 
-      Map<String, dynamic> newsJson = news.toJson();
-      
-      String jsonPayload = jsonEncode(newsJson);
+        Map<String, dynamic> newsJson = news.toJson();
+        
+        String jsonPayload = jsonEncode(newsJson);
 
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonPayload,
-      );
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonPayload,
+        );
 
-      if (response.statusCode == 200) {
-        widget.onNewsUpdated(); // Call the callback
-        _showSuccessDialog();
-      } else {
-        final responseData = jsonDecode(response.body);
-        _showErrorDialog(responseData['message']);
+        if (response.statusCode == 200) {
+          widget.onNewsUpdated(); // Call the callback
+          _showSuccessDialog();
+        } else {
+          final responseData = jsonDecode(response.body);
+          _showErrorDialog(responseData['message']);
+        }
+      } catch (e) {
+        print('Error updating news: $e');
+        _showErrorDialog('An unexpected error occurred. Please try again.');
       }
     }
   }
@@ -132,14 +137,17 @@ class _EditNewsPageState extends State<EditNewsPage> {
   void _showSuccessDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('News Updated Successfully'),
         content: const Text('Your news has been updated.'),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-              Navigator.of(context).pop(); // Return to previous screen
+              // Close the dialog
+              Navigator.of(context).pop();
+              // Return to previous screen with success result
+              Navigator.of(context).pop(true);
             },
             child: const Text('OK'),
           ),
