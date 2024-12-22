@@ -2,7 +2,7 @@ import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Untuk Uint8List
 import 'package:image_picker/image_picker.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 
 class AddMenuForm extends StatefulWidget {
   const AddMenuForm({super.key});
@@ -172,10 +172,6 @@ class _AddMenuFormState extends State<AddMenuForm> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
       ),
     );
   }

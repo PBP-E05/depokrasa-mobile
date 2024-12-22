@@ -1,6 +1,6 @@
 import 'package:depokrasa_mobile/screen/addmenuform.dart';
 import 'package:flutter/material.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 
 void main() {
   runApp(DepokRasaApp());
@@ -160,11 +160,6 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
         ),
       ),
 
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
 
       // FloatingActionButton
       floatingActionButton: FloatingActionButton(
