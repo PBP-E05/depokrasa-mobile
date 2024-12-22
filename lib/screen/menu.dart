@@ -733,57 +733,46 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                 ),
               ),
               Expanded(
-                flex: 10, 
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Rp$price", 
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold
-                        ),
-                        textAlign: TextAlign.end,
-
-                      ),
-                    ]
-                  )
-                )
-              ),
-              Expanded(
                 flex: 15, 
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          minimumSize: const Size(double.infinity, 32),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Add to Wishlist',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14
-                          )
-                        )
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      restaurantName.replaceAll("-"," "),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                      )
+                    )
+                  ),
+                )
+              ),
+              Expanded(
+                flex: 10, 
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Container(
+                    color: Colors.green,
+                    decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      "Rp$price", 
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold
                       ),
-                    ]
+                      textAlign: TextAlign.end,
+
+                    ),
                   )
                 )
-              )
+              ),
             ],
           ),
     );

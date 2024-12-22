@@ -26,7 +26,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
   late List<String> category_list;
 
 
-  String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
+  String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "https://sx6s6j6f-8000.asse.devtunnels.ms/";
   Future<List<ArticleEntry>> fetchArticles(CookieRequest request) async {
     // ignore: prefer_typing_uninitialized_variables
     final response;

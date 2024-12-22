@@ -24,7 +24,7 @@ class ArticleContentPage extends StatefulWidget {
 
 class _ArticleContentPageState extends State<ArticleContentPage> {
   late Future<List<dynamic>> commentsFuture;  
-  String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
+  String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "https://sx6s6j6f-8000.asse.devtunnels.ms/";
   
   
   Future<ArticleEntry> fetchArticleContent(CookieRequest request) async {

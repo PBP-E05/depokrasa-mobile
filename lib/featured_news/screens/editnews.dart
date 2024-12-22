@@ -104,7 +104,7 @@ class _EditNewsPageState extends State<EditNewsPage> {
           updatedAt: DateTime.now().toIso8601String(),
         );
 
-        String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+        String baseUrl = String baseUrl = kDebugMode ? "http://127.0.0.1:8000" : "https://sx6s6j6f-8000.asse.devtunnels.ms/";
         String apiUrl = "$baseUrl/edit-news/${news.id}/";
 
         Map<String, dynamic> newsJson = news.toJson();

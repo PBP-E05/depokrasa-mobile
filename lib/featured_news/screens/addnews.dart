@@ -132,7 +132,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
           grandImage: grandImageUrl ?? '',
         );
 
-        String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+        String baseUrl = String baseUrl = kDebugMode ? "http://127.0.0.1:8000" : "https://sx6s6j6f-8000.asse.devtunnels.ms/";
         String apiUrl = "$baseUrl/create-news/";
 
         Map<String, dynamic> newsJson = updatedNews.toJson();
