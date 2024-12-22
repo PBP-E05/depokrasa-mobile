@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/discounts.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/promotions.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/services/ApiService.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
 
 class PromotionsPage extends StatefulWidget {
   const PromotionsPage({Key? key}) : super(key: key);
@@ -74,10 +73,6 @@ void _onNavBarTap(int index) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

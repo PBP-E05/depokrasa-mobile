@@ -1,4 +1,5 @@
 import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
+import 'package:depokrasa_mobile/promosiDanDiskon/screen/promotion_page.dart';
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   // List of pages to navigate to
   final List<Widget> _pages = [
     const DepokRasaHomePage(),
-    const DepokRasaHomePage(),
+    const PromotionsPage(),
     const DepokRasaHomePage(),
     const ArticlesPage(),
     const ArticlesPage(),

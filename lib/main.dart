@@ -1,3 +1,4 @@
+import 'package:depokrasa_mobile/authentication/screens/login.dart';
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 // import 'package:depokrasa_mobile/authentication/screens/login.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        home: const PromotionsPage(),
+        home: const LoginPage(),
       ),
     );
   }

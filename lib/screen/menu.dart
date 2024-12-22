@@ -28,178 +28,157 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // Initially show only the first 6 restaurants
-    _restaurants = restaurantData;
-    _visibleRestaurants = _restaurants.take(6).toList();
-  }
-
-  // Method to show all restaurants when the "Show More" button is pressed
-  void _showMore() {
-    setState(() {
-      _showAll = true;
-      _visibleRestaurants = _restaurants; // Show all restaurants
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'DepokRasa',
-          style: TextStyle(
-            color: Colors.orange,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search Bar
-              Row(
+      backgroundColor: Colors.white,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        prefixIcon: const Icon(Icons.search),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 25.0, bottom: 15),
+                      child: Image.asset(
+                        'images/depokrasa-logo.png',
+                        width: 198,
+                        height: 52,
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Search Bar
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            prefixIcon: const Icon(Icons.search),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-
-              FutureBuilder(
-                future: fetchRestaurants(request), 
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.data == null){
-                    return const material.Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          Text("Loading Pages"),
-                          CircularProgressIndicator(),
-                        ],
-                      )
-                    );
-                  }else {
-                    if(!snapshot.hasData){
-                      return const Column(
-                        children: [
-                          Text(
-                            'Restaurants not found!',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                          material.SizedBox(height: 8),
-                        ],
-                      );
-                    }else{
-                      return Container(
-                        child:Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Restaurant List
-                            const Text(
-                              'Restaurant List',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const material.SizedBox(height: 8),
-                            material.SizedBox(
-                              height: 120, // Tinggi container agar slider terlihat dengan baik
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal, // Scroll horizontal
-                                itemCount: snapshot.data!.length, // Jumlah restoran yang ingin ditampilkan
-                                itemBuilder: (context, index) {
-                                  // Data restora n                        
-                                    return _buildRestaurantCard(
-                                      snapshot.data[index]!.name.toString().replaceAll(" ", "-"),                  
-                                      snapshot.data[index]!.name,
-                                      baseUrl                  
-                                    );                                    
-                                }
-                              )
-                            ),
-                            
-                            const material.SizedBox(height: 16),
-
-                            // Depok Rasa Pick
-                            const Text(
-                              'Depok Rasa Pick',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Inter'
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                                childAspectRatio: 0.75,
-                              ),
-                              itemCount: snapshot.data.length*3,
-                              itemBuilder: (context, index) {
-                                return  _buildFoodCard(
-                                  "${snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase()}-menu-${index%3 + 1}",
-                                  snapshot.data[index~/3].menu[index % 3].foodName.toString(),
-                                  snapshot.data[index~/3].menu[index % 3].price.toString(),
-                                  snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase(),
-                                  baseUrl
-                                );
-                              },
-                            ),
-                          ]
-                      ),
-
-                      );
-                   }
-                  }
-                } 
-              ),
-
-              // Show More Button
-              const material.SizedBox(height: 16),
-              material.Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('Show More'),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          SliverToBoxAdapter(
+            child: FutureBuilder(
+              future: fetchRestaurants(request),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Loading Pages"),
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  );
+                }
+                
+                if (!snapshot.hasData) {
+                  return const Column(
+                    children: [
+                      Text(
+                        'Restaurants not found!',
+                        style: TextStyle(fontSize: 20, color: Colors.black),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  );
+                }
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Restaurant List',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 120,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return _buildRestaurantCard(
+                              snapshot.data[index]!.name.toString().replaceAll(" ", "-"),
+                              snapshot.data[index]!.name,
+                              baseUrl
+                            );
+                          }
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Depok Rasa Pick',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Inter'
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: FutureBuilder(
+              future: fetchRestaurants(request),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const SliverToBoxAdapter(child: SizedBox());
+                }
+
+                return SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 0.75,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return _buildFoodCard(
+                        "${snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase()}-menu-${index%3 + 1}",
+                        snapshot.data[index~/3].menu[index % 3].foodName.toString(),
+                        snapshot.data[index~/3].menu[index % 3].price.toString(),
+                        snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase(),
+                        baseUrl
+                      );
+                    },
+                    childCount: snapshot.data.length * 3,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
-
-
-      // FloatingActionButton
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(
@@ -221,6 +200,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
+}
 
   // Widget untuk kartu restoran
   Widget _buildRestaurantCard(String imagePath, String name, baseUrl) {
@@ -245,72 +225,102 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   // Widget untuk kartu makanan
-  Widget _buildFoodCard(String imagePath, String title, String price,String restaurantName,String baseUrl) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: LayoutBuilder(
-      builder: (context, constraints) {
-        double cardHeight = constraints.maxHeight * 0.5; // Adjust height based on available space
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-              child: Image.network(
-                '$baseUrl/media/restaurant/$restaurantName/$imagePath.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+  Widget _buildFoodCard(String imagePath, String title, String price, String restaurantName, String baseUrl) {
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 50, // Image takes 3/5 of the square
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                  child: SizedBox.expand(
+                    child: Image.network(
+                      '$baseUrl/media/restaurant/$restaurantName/$imagePath.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text("Rp$price", 
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontFamily: 'Inter',
-                      fontSize:14,
-                      fontWeight: FontWeight.bold
-                    )
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      minimumSize: const Size(double.infinity, 36),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              Expanded(
+                flex: 25, 
+                child: Padding(
+                  padding: const EdgeInsets.only(top:8,right:8,left:8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    child: const Text(
-                      'Add to Wishlist',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.bold,
-                        fontSize:14 
-                      )
-                    )
+                      const SizedBox(height: 4),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
-        );
-      }
+              Expanded(
+                flex: 10, 
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Rp$price", 
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold
+                        ),
+                        textAlign: TextAlign.end,
+
+                      ),
+                    ]
+                  )
+                )
+              ),
+              Expanded(
+                flex: 15, 
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          minimumSize: const Size(double.infinity, 32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          'Add to Wishlist',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14
+                          )
+                        )
+                      ),
+                    ]
+                  )
+                )
+              )
+            ],
+          ),
     );
-  }
 }
+
