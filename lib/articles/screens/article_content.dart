@@ -1,25 +1,22 @@
 import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
-import 'package:depokrasa_mobile/shared/menu.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:depokrasa_mobile/articles/models/comments_entry.dart';
 import 'package:depokrasa_mobile/articles/models/articles_entry.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 
 
 class ArticleContentPage extends StatefulWidget {
   final int articleId;
-  final depokrasa_user.User user;
+
 
   const ArticleContentPage(
     {super.key, 
     required this.articleId,
-    required this.user,
+
     });
 
   @override
@@ -28,6 +25,13 @@ class ArticleContentPage extends StatefulWidget {
 
 class _ArticleContentPageState extends State<ArticleContentPage> {
   late Future<List<dynamic>> commentsFuture;
+  int _currentIndex = 0;
+
+  void _onNavBarTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
   
@@ -173,56 +177,66 @@ class _ArticleContentPageState extends State<ArticleContentPage> {
                       const SizedBox(height: 10,
                       ),
 
-                      const Text(
-                        "#Categories:",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Inter',
-                          fontStyle: FontStyle.italic
-                          
+                      Container(
+                        color: const Color.fromARGB(255, 193, 193, 193),
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "#Categories:",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Inter',
+                                fontStyle: FontStyle.italic
+                                
+                              ),
+                            ),
+
+                            // Article's Categories
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              
+                              children: [
+                                for (var category in article.categories)
+                                  InkWell(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 3.0),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                        color: const Color(0xFFFB633A),
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: Text(
+                                          "#$category",
+                                          style: const TextStyle(
+                                            fontSize: 13.0,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Inter',
+                                            fontStyle: FontStyle.italic,
+                                            color: Color(0xFFFFFFFF),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    onTap: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ArticlesPage(categoryFilter: category),
+                                        ),
+                                      );
+                                    }
+                                  )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-
-                      // Article's Categories
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for (var category in article.categories)
-                            InkWell(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 3.0),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                                  decoration: BoxDecoration(
-                                  color: const Color(0xFFFB633A),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: Text(
-                                    category,
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Inter',
-                                      fontStyle: FontStyle.italic,
-                                      color: Color(0xFFFFFFFF),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              onTap: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ArticlesPage(categoryFilter: category, user:widget.user),
-                                  ),
-                                );
-                              }
-                            )
-                        ],
-                      ),
-
+                      const SizedBox(height: 8,),
                       const Divider(
                         thickness: 3,
                         color: Colors.black,

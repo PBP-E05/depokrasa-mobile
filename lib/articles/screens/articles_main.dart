@@ -1,25 +1,20 @@
 // ignore_for_file: avoid_print
-
 import 'dart:collection';
-
 import 'package:depokrasa_mobile/articles/models/categories_entry.dart';
 import 'package:depokrasa_mobile/articles/screens/article_content.dart';
 import 'package:depokrasa_mobile/articles/models/articles_entry.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 
 class ArticlesPage extends StatefulWidget {
   final String categoryFilter;
-  final depokrasa_user.User user;
 
   const ArticlesPage({
     super.key,
     this.categoryFilter = 'all',
-    required this.user,
     });
 
   @override
@@ -29,6 +24,13 @@ class ArticlesPage extends StatefulWidget {
 class _ArticlesPageState extends State<ArticlesPage> {
   // ignore: non_constant_identifier_names
   late List<String> category_list;
+  int _currentIndex = 3;
+
+  void _onNavBarTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
   Future<List<ArticleEntry>> fetchArticles(CookieRequest request) async {
@@ -141,7 +143,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                           color:const Color(0xFFFB633A),
                           child: Align(
                             alignment: Alignment.centerRight,
-                            child:DropdownCategories(categories: snapshot.data, user: widget.user),
+                            child:DropdownCategories(categories: snapshot.data),
                           )
                         );
                       }
@@ -158,7 +160,6 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                 MaterialPageRoute(
                                   builder: (context) => ArticleContentPage(
                                     articleId: snapshot.data![index].id,
-                                    user: widget.user,
                                   ),
                                 ),
                               );
@@ -227,7 +228,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                                               Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                  builder: (context) => ArticlesPage(categoryFilter: category, user:widget.user),
+                                                                  builder: (context) => ArticlesPage(categoryFilter: category),
                                                                 ),
                                                               );
                                                             },
@@ -289,12 +290,10 @@ class _ArticlesPageState extends State<ArticlesPage> {
 
 class DropdownCategories extends StatefulWidget {
   final List<String> categories;
-  final depokrasa_user.User user;
 
   DropdownCategories({
     super.key,
     required this.categories,
-    required this.user,
   });
 
   @override
@@ -369,7 +368,7 @@ class _DropdownCategoriesState extends State<DropdownCategories> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ArticlesPage(categoryFilter: category ?? 'all', user: widget.user),
+                  builder: (context) => ArticlesPage(categoryFilter: category ?? 'all'),
                 ),
               );
             },
