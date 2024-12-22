@@ -1,8 +1,8 @@
-import 'package:depokrasa_mobile/screen/menu.dart';
+import 'package:depokrasa_mobile/screen/menu.dart' as menu;
 import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Untuk Uint8List
 import 'package:image_picker/image_picker.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 
 class AddMenuForm extends StatefulWidget {
   const AddMenuForm({super.key});
@@ -41,17 +41,17 @@ class _AddMenuFormState extends State<AddMenuForm> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => DepokRasaApp(),
+                builder: (context) => const menu.DepokRasaHomePage(),
               ),
             );
           },
         ),
-        title: Text('Tambah Menu'),
+        title: const Text('Tambah Menu'),
         backgroundColor: Colors.white,
       ),
       body: Form(
@@ -75,7 +75,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: _imageBytes == null
-                        ? Icon(Icons.add, size: 50, color: Colors.grey)
+                        ? const Icon(Icons.add, size: 50, color: Colors.grey)
                         : Image.memory(_imageBytes!, fit: BoxFit.cover), // Gunakan Image.memory
                   ),
                 ),
@@ -83,7 +83,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
 
                 // Input Nama Makanan
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Masukan Nama',
                     border: OutlineInputBorder(),
                   ),
@@ -103,7 +103,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
 
                 // Input Nama Restoran
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Masukan Nama Restoran',
                     border: OutlineInputBorder(),
                   ),
@@ -123,7 +123,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
 
                 // Input Harga
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Masukan Harga',
                     border: OutlineInputBorder(),
                   ),
@@ -172,10 +172,6 @@ class _AddMenuFormState extends State<AddMenuForm> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
       ),
     );
   }

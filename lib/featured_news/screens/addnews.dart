@@ -18,6 +18,7 @@ class AddNewsPage extends StatefulWidget {
       {Key? key, required this.user, required this.onNewsSubmitted})
       : super(key: key);
 
+
   @override
   _AddNewsPageState createState() => _AddNewsPageState();
 }
@@ -69,10 +70,12 @@ class _AddNewsPageState extends State<AddNewsPage> {
     try {
       // Ensure Supabase is properly initialized
       final supabaseClient = Supabase.instance.client;
+
       if (supabaseClient == null) {
         print('Supabase client is not initialized');
         return null;
       }
+
 
       final fileBytes = await pickedFile.readAsBytes();
 
@@ -105,7 +108,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
     if (_formKey.currentState!.validate()) {
       // Create FeaturedNews object
       final news = FeaturedNews(
-        id: Uuid().v4(), // Add this line
+        id: const Uuid().v4(), // Add this line
         title: _titleController.text.trim(),
         iconImage: '',
         grandTitle: _grandTitleController.text.trim(),

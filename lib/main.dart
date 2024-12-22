@@ -1,3 +1,4 @@
+import 'package:depokrasa_mobile/authentication/screens/login.dart';
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 // import 'package:depokrasa_mobile/authentication/screens/login.dart';
@@ -13,7 +14,8 @@ Future<void> main() async {
     url: 'https://ibuqzrjrzshvnuahjjdm.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlidXF6cmpyenNodm51YWhqamRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQzNjUxMTEsImV4cCI6MjA0OTk0MTExMX0.seInsPtndZA-mW2sqDakhTWlwanbhVfXVmWfdtk0ZUc',
   );
-  runApp(MyApp());
+  
+  runApp(const MyApp());
 }
         
 class MyApp extends StatelessWidget {
@@ -96,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        home: const PromotionsPage(),
+        home: const LoginPage(),
       ),
     );
   }
