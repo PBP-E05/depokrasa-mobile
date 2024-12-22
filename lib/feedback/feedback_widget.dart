@@ -13,64 +13,94 @@ class FeedbackSupportPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: const Text('Feedback & Support'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ListView(
-                children: const [
-                  ExpandableItem(
-                    question: "How Can I Get Started?",
-                    answer:
-                        "You can get started by signing up and exploring our platform.",
-                  ),
-                  ExpandableItem(
-                    question: "What is the info I can get?",
-                    answer:
-                        "You can find details about our services, features, and more.",
-                  ),
-                  ExpandableItem(
-                    question: "What kind of support do you provide?",
-                    answer:
-                        "We provide technical support, guidance, and troubleshooting.",
-                  ),
-                  ExpandableItem(
-                    question: "Can I book an appointment with a restaurant?",
-                    answer:
-                        "Yes, you can use our app to schedule appointments easily.",
-                  ),
-                ],
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 25.0, bottom: 15),
+              child: Image.asset(
+                'images/depokrasa-logo.png',
+                width: 198,
+                height: 52,
               ),
             ),
-            SizedBox(height: screenHeight * 0.02),
-            SizedBox(
-              height: screenHeight * 0.08,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => FeedbackForm(apiUrl: apiUrl),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+          ),
+          Positioned(
+            top: 95, // Posisi di bawah logo
+            left: 16, // Mepet kiri
+            child: const Text(
+              'Feedback & Support',
+              style: TextStyle(
+                fontSize: 20, // Ukuran font
+                color: Colors.black, // Warna hitam
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 130), // Spasi tambahan agar konten tidak bertabrakan dengan teks
+                Expanded(
+                  child: ListView(
+                    children: const [
+                      ExpandableItem(
+                        question: "How Can I Get Started?",
+                        answer:
+                            "You can get started by signing up and exploring our platform.",
+                      ),
+                      ExpandableItem(
+                        question: "What is the info I can get?",
+                        answer:
+                            "You can find details about our services, features, and more.",
+                      ),
+                      ExpandableItem(
+                        question: "What kind of support do you provide?",
+                        answer:
+                            "We provide technical support, guidance, and troubleshooting.",
+                      ),
+                      ExpandableItem(
+                        question: "Can I book an appointment with a restaurant?",
+                        answer:
+                            "Yes, you can use our app to schedule appointments easily.",
+                      ),
+                    ],
                   ),
                 ),
-                child: const Text('Feedback'),
-              ),
+                SizedBox(height: screenHeight * 0.02),
+                SizedBox(
+                  height: screenHeight * 0.08,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => FeedbackForm(apiUrl: apiUrl),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('Feedback'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+  
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
   }
 }
 
@@ -171,7 +201,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Feedback submitted successfully!')),
+          SnackBar(content: Text('Feedback submitted successfully!')),
         );
         Navigator.pop(context);
       } else {
