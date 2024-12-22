@@ -1,4 +1,5 @@
 import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
+import 'package:depokrasa_mobile/feedback/feedback_widget.dart';
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
@@ -33,6 +34,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       DepokRasaHomePage(user: widget.user), // Pass user parameter
       DepokRasaHomePage(user: widget.user), // Pass user parameter
       ArticlesPage(),
+      FeedbackSupportPage(),
       UserProfileScreen(
           user: widget.user), // Correctly navigate to UserProfileScreen
     ];
@@ -86,6 +88,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
             label: 'Articles',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.feedback),
+            label: 'Feedback',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
