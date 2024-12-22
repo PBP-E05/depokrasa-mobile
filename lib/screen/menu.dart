@@ -7,6 +7,8 @@ void main() {
 }
 
 class DepokRasaApp extends StatelessWidget {
+  const DepokRasaApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,6 +19,8 @@ class DepokRasaApp extends StatelessWidget {
 }
 
 class DepokRasaHomePage extends StatefulWidget {
+  const DepokRasaHomePage({super.key});
+
   @override
   _DepokRasaHomePageState createState() => _DepokRasaHomePageState();
 }
@@ -62,13 +66,13 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: const Icon(Icons.search),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Restaurant List
               const Text(
@@ -78,7 +82,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               SizedBox(
                 height: 120, // Tinggi container agar slider terlihat dengan baik
                 child: ListView.builder(
@@ -107,7 +111,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Depok Rasa Pick
               const Text(
@@ -117,7 +121,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -138,7 +142,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
               ),
 
               // Show More Button
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Center(
                 child: ElevatedButton(
                   onPressed: () {},
@@ -168,7 +172,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AddMenuForm(),
+              builder: (context) => const AddMenuForm(),
             ),
           );
         },
