@@ -134,7 +134,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                         return Container(
                           margin: const EdgeInsets.only(top: 3, bottom:3),
                           //height:39,
-                          color:const Color(0xFFFB633A),
+                          color:Colors.orange,
                           child: Align(
                             alignment: Alignment.centerRight,
                             child:DropdownCategories(categories: snapshot.data),
@@ -147,10 +147,9 @@ class _ArticlesPageState extends State<ArticlesPage> {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () async {
+                            onTap: () {
                               // Navigate to the ArticleContentPage with the articleId
-                              Navigator.push(
-                                context,
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ArticleContentPage(
                                     articleId: snapshot.data![index].id,
@@ -219,8 +218,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                                         for (var category in snapshot.data![index].categories)
                                                           GestureDetector(
                                                             onTap: () async {
-                                                              Navigator.push(
-                                                                context,
+                                                              Navigator.of(context).push(
                                                                 MaterialPageRoute(
                                                                   builder: (context) => ArticlesPage(categoryFilter: category),
                                                                 ),
@@ -231,7 +229,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                                               child: Container(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                                                                 decoration: BoxDecoration(
-                                                                  color: const Color(0xFFFB633A),
+                                                                  color: Colors.orange,
                                                                   borderRadius: BorderRadius.circular(8.0),
                                                                 ),
                                                                 child: Text(
@@ -352,15 +350,14 @@ class _DropdownCategoriesState extends State<DropdownCategories> {
               size: 35,
               color: Colors.white,
             ),
-            dropdownColor: const Color(0xFFFB633A),  // Set dropdown background color
+            dropdownColor: Colors.orange,  // Set dropdown background color
             underline: Container(),  // Removes the underline, as it isn't needed
             onChanged: (String? category) {
               setState(() {
                 selectedCategory = category;  // Update selected category
               });
               // Navigate to the Articles screen with the selected category
-              Navigator.push(
-                context,
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ArticlesPage(categoryFilter: category ?? 'all'),
                 ),
