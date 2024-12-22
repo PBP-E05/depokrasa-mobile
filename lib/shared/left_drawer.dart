@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:depokrasa_mobile/authentication/screens/login.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
+// import 'package:depokrasa_mobile/authentication/screens/login.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
