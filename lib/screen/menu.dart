@@ -149,8 +149,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                             child: ElevatedButton.icon(
                               onPressed: () async {
                                 try {
-                                  final result = await Navigator.push(
-                                    context,
+                                  final result = await Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => AddNewsPage(
                                         user: widget.user,
@@ -351,8 +350,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AddMenuForm(user: widget.user), // Pass user parameter
             ),
@@ -530,8 +528,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                                 icon: const Icon(Icons.edit, color: Colors.blue),
                                 onPressed: () async {
                                   try {
-                                    final result = await Navigator.push(
-                                      context,
+                                    final result = await Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => EditNewsPage(
                                           user: widget.user,
