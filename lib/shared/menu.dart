@@ -7,6 +7,7 @@ import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   final depokrasa_user.User user;

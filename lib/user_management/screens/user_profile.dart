@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/shared/left_drawer.dart';
 
 export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key});
-
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
@@ -115,8 +114,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: Text('User Profile'),
       ),
+      drawer: LeftDrawer(), // Use the imported LeftDrawer here
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -174,6 +174,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Navigator.of(context).pop();
               },
               child: const Text('Edit Profile'),
+
             ),
           ],
         ),

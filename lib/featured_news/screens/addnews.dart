@@ -15,7 +15,9 @@ class AddNewsPage extends StatefulWidget {
   final VoidCallback onNewsSubmitted; // Add a callback
 
   const AddNewsPage(
-      {super.key, required this.user, required this.onNewsSubmitted});
+      {Key? key, required this.user, required this.onNewsSubmitted})
+      : super(key: key);
+
 
   @override
   _AddNewsPageState createState() => _AddNewsPageState();
@@ -52,7 +54,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      final imageUrl = await _uploadImage(pickedFile, isIconImage ? 'icons/${const Uuid().v4()}.png' : 'grands/${const Uuid().v4()}.png');
+      final imageUrl = await _uploadImage(pickedFile, isIconImage ? 'icons/${Uuid().v4()}.png' : 'grands/${Uuid().v4()}.png');
 
       setState(() {
         if (isIconImage) {
@@ -68,6 +70,12 @@ class _AddNewsPageState extends State<AddNewsPage> {
     try {
       // Ensure Supabase is properly initialized
       final supabaseClient = Supabase.instance.client;
+
+      if (supabaseClient == null) {
+        print('Supabase client is not initialized');
+        return null;
+      }
+
 
       final fileBytes = await pickedFile.readAsBytes();
 
