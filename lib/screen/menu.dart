@@ -52,7 +52,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
       isLoading = true;
     });
 
-    String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
     String apiUrl = "$baseUrl/news-json/";
     
     try {
@@ -80,7 +80,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   Future<void> deleteNews(String newsId) async {
-    String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
     String apiUrl = "$baseUrl/delete-news/$newsId/";
     
     try {

@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:uuid/uuid.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 class AddNewsPage extends StatefulWidget {
   final depokrasa_user.User user;
@@ -132,7 +133,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
           grandImage: grandImageUrl ?? '',
         );
 
-        String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+        String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
         String apiUrl = "$baseUrl/create-news/";
 
         Map<String, dynamic> newsJson = updatedNews.toJson();

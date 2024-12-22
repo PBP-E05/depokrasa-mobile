@@ -5,6 +5,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depokrasa_mobile/authentication/screens/login.dart';
+import 'package:flutter/foundation.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -235,7 +236,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 String password1 = _passwordController.text;
                                 String password2 = _confirmPasswordController.text;
 
-                                String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+                                String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
                                 String apiUrl = "$baseUrl/auth/register/";
 
                                 try {

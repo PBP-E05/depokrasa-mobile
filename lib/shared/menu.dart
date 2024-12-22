@@ -9,6 +9,7 @@ import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
 import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:flutter/foundation.dart';
 
 class MyHomePage extends StatefulWidget {
   final depokrasa_user.User user;
@@ -35,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoading = true;
     });
 
-    String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
     String apiUrl = "$baseUrl/news-json/";
     
     try {
@@ -63,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> deleteNews(String newsId) async {
-    String baseUrl = dotenv.env['BASE_URL'] ?? "http://127.0.0.1:8000";
+    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
     String apiUrl = "$baseUrl/delete-news/$newsId/";
     
     try {

@@ -7,7 +7,7 @@ import '../models/promotions.dart';
 
 class ApiService {
   // Sementara gini dulu
-  final String baseUrl = 'http://127.0.0.1:8000/promotions';
+  final String baseUrl = 'http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id/promotions';
 
   Future<List<Discounts>> fetchDiscounts() async {
     final response = await http.get(Uri.parse('$baseUrl/api/discounts/'));
