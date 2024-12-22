@@ -24,13 +24,7 @@ class ArticlesPage extends StatefulWidget {
 class _ArticlesPageState extends State<ArticlesPage> {
   // ignore: non_constant_identifier_names
   late List<String> category_list;
-  int _currentIndex = 3;
 
-  void _onNavBarTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
   Future<List<ArticleEntry>> fetchArticles(CookieRequest request) async {
@@ -291,7 +285,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
 class DropdownCategories extends StatefulWidget {
   final List<String> categories;
 
-  DropdownCategories({
+  const DropdownCategories({
     super.key,
     required this.categories,
   });

@@ -1,4 +1,3 @@
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:depokrasa_mobile/shared/left_drawer.dart';
@@ -24,14 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
   List<FeaturedNews> featuredNewsList = [];
   final CarouselSliderController _carouselController = CarouselSliderController();
   bool isLoading = true;
-
-  int _currentIndex = 0;
-
-  void _onNavBarTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   void initState() {
@@ -198,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 

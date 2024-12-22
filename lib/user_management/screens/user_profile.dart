@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:depokrasa_mobile/shared/left_drawer.dart';
 import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
-import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
+import 'package:depokrasa_mobile/models/user.dart';
+export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final User user; // Add this line to define the user parameter
@@ -79,15 +79,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Success'),
-            content: Text('Profile updated successfully.'),
+            title: const Text('Success'),
+            content: const Text('Profile updated successfully.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop(); // Return to previous screen
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -99,14 +99,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to update profile. Please try again.'),
+            title: const Text('Error'),
+            content: const Text('Failed to update profile. Please try again.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Stay on current screen
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -127,64 +127,65 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       appBar: AppBar(
         title: Text('User Profile'),
       ),
-      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
+      bottomNavigationBar: BottomNavBar(), // Pass the user parameter here
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
               onChanged: (value) {
                 setState(() {
                   username = value;
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
               onChanged: (value) {
                 setState(() {
                   email = value;
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: profilePictureController,
-              decoration: InputDecoration(labelText: 'Profile Picture URL'),
+              decoration: const InputDecoration(labelText: 'Profile Picture URL'),
               onChanged: (value) {
                 setState(() {
                   profilePictureUrl = value;
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CircleAvatar(
               radius: 50,
               backgroundImage: profilePictureUrl.isNotEmpty
                   ? NetworkImage(profilePictureUrl)
-                  : AssetImage('images/image1.jpg') as ImageProvider,
+                  : const AssetImage('images/image1.jpg'),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               username,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               email,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Navigate to edit profile screen
                 Navigator.of(context).pop();
               },
-              child: Text('Edit Profile'),
+              child: const Text('Edit Profile'),
+
             ),
           ],
         ),

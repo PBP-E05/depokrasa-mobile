@@ -1,5 +1,4 @@
 import 'package:depokrasa_mobile/articles/screens/articles_main.dart';
-import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -24,16 +23,9 @@ class ArticleContentPage extends StatefulWidget {
 }
 
 class _ArticleContentPageState extends State<ArticleContentPage> {
-  late Future<List<dynamic>> commentsFuture;
-  int _currentIndex = 0;
-
-  void _onNavBarTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
+  late Future<List<dynamic>> commentsFuture;  
   String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
+  
   
   Future<ArticleEntry> fetchArticleContent(CookieRequest request) async {
     final response = await request.get(

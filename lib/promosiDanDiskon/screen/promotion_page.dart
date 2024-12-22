@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/discounts.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/promotions.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/services/ApiService.dart';
-import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
 
 class PromotionsPage extends StatefulWidget {
@@ -77,7 +76,6 @@ void _onNavBarTap(int index) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

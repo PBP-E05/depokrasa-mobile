@@ -14,7 +14,7 @@ class EditNewsPage extends StatefulWidget {
   final FeaturedNews news;
   final VoidCallback onNewsUpdated;
 
-  const EditNewsPage({Key? key, required this.user, required this.news, required this.onNewsUpdated}) : super(key: key);
+  const EditNewsPage({super.key, required this.user, required this.news, required this.onNewsUpdated});
 
   @override
   _EditNewsPageState createState() => _EditNewsPageState();
