@@ -1,4 +1,4 @@
-import 'package:depokrasa_mobile/screen/menu.dart';
+import 'package:depokrasa_mobile/screen/menu.dart' as menu;
 import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Untuk Uint8List
 import 'package:image_picker/image_picker.dart';
@@ -46,7 +46,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => DepokRasaApp(),
+                builder: (context) => const menu.DepokRasaHomePage(),
               ),
             );
           },

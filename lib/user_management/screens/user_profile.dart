@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:depokrasa_mobile/shared/bottom_navbar..dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 
 export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
 
 class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({super.key});
+
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }

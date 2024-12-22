@@ -1,11 +1,8 @@
-import 'package:depokrasa_mobile/screen/menu.dart';
-import 'package:depokrasa_mobile/shared/bottom_navbar..dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:depokrasa_mobile/authentication/screens/register.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:depokrasa_mobile/shared/menu.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:depokrasa_mobile/models/user.dart';

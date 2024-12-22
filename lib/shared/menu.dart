@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:depokrasa_mobile/shared/bottom_navbar..dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,7 +7,6 @@ import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   final depokrasa_user.User user;
