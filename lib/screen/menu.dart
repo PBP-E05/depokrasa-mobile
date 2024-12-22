@@ -13,6 +13,7 @@ import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
+import 'package:depokrasa_mobile/models/wishlist_entry.dart';
 
 class DepokRasaHomePage extends StatefulWidget {
   final depokrasa_user.User user;
@@ -338,7 +339,9 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                         snapshot.data[index~/3].menu[index % 3].foodName.toString(),
                         snapshot.data[index~/3].menu[index % 3].price.toString(),
                         snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase(),
-                        baseUrl
+                        baseUrl,
+                        widget.user,
+                        context // Pass context parameter
                       );
                     },
                     childCount: snapshot.data.length * 3,
@@ -693,7 +696,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   // Widget untuk kartu makanan
-  Widget _buildFoodCard(String imagePath, String title, String price, String restaurantName, String baseUrl) {
+  Widget _buildFoodCard(String imagePath, String title, String price, String restaurantName, String baseUrl, depokrasa_user.User user, BuildContext context) {
   return Card(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
@@ -765,7 +768,28 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final request = context.read<CookieRequest>();
+                          String apiUrl = "$baseUrl/wishlist/add/";
+
+                          try {
+                            final response = await request.postJson(apiUrl, jsonEncode({
+                              'name': title,
+                            }));
+
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Item $title added to wishlist')),
+                              );
+                            } else {
+                              throw Exception(response['message']);
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error adding item to wishlist: $e')),
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
                           minimumSize: const Size(double.infinity, 32),

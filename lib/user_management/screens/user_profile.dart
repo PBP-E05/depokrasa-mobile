@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 import 'package:depokrasa_mobile/models/user.dart';
 export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
+import 'package:depokrasa_mobile/screen/wishlist.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final User user;
@@ -173,6 +174,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       child: const Text(
                         'Save',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WishlistPage(user: widget.user),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      child: const Text(
+                        'Go to Wishlist',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
