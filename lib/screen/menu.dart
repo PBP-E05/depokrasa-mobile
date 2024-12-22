@@ -28,6 +28,22 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Initially show only the first 6 restaurants
+    _restaurants = restaurantData;
+    _visibleRestaurants = _restaurants.take(6).toList();
+  }
+
+  // Method to show all restaurants when the "Show More" button is pressed
+  void _showMore() {
+    setState(() {
+      _showAll = true;
+      _visibleRestaurants = _restaurants; // Show all restaurants
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(

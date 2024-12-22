@@ -1,6 +1,7 @@
 import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
-import 'package:depokrasa_mobile/authentication/screens/login.dart';
+// import 'package:depokrasa_mobile/authentication/screens/login.dart';
+import 'package:depokrasa_mobile/promosiDanDiskon/screen/promotion_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        home: const LoginPage(),
+        home: const PromotionsPage(),
       ),
     );
   }
