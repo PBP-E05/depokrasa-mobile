@@ -1,5 +1,5 @@
-import 'package:depokrasa_mobile/screen/addmenuform.dart';
 import 'package:flutter/material.dart';
+import 'package:depokrasa_mobile/screen/addmenuform.dart';
 import 'package:depokrasa_mobile/shared/left_drawer.dart';
 
 void main() {
@@ -23,10 +23,43 @@ class DepokRasaHomePage extends StatefulWidget {
 
 class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   int _currentIndex = 0;
+  List<dynamic> _restaurants = []; // Full list of restaurants
+  List<dynamic> _visibleRestaurants = []; // List of visible restaurants
+  bool _showAll = false; // Flag to determine whether to show all or not
+
+  // Simulated restaurant data
+  final List<Map<String, String>> restaurantData = [
+    {'image': 'assets/mujigae.png', 'name': 'Mujigae'},
+    {'image': 'assets/ancon.png', 'name': 'Ancon'},
+    {'image': 'assets/takarajima.png', 'name': 'Takarajima'},
+    {'image': 'assets/restaurant4.png', 'name': 'Restaurant 4'},
+    {'image': 'assets/restaurant5.png', 'name': 'Restaurant 5'},
+    {'image': 'assets/restaurant6.png', 'name': 'Restaurant 6'},
+    {'image': 'assets/restaurant7.png', 'name': 'Restaurant 7'},
+    {'image': 'assets/restaurant8.png', 'name': 'Restaurant 8'},
+    {'image': 'assets/restaurant9.png', 'name': 'Restaurant 9'},
+    {'image': 'assets/restaurant10.png', 'name': 'Restaurant 10'},
+  ];
 
   void _onNavBarTap(int index) {
     setState(() {
       _currentIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initially show only the first 6 restaurants
+    _restaurants = restaurantData;
+    _visibleRestaurants = _restaurants.take(6).toList();
+  }
+
+  // Method to show all restaurants when the "Show More" button is pressed
+  void _showMore() {
+    setState(() {
+      _showAll = true;
+      _visibleRestaurants = _restaurants; // Show all restaurants
     });
   }
 
@@ -80,26 +113,12 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
               ),
               SizedBox(height: 8),
               SizedBox(
-                height: 120, // Tinggi container agar slider terlihat dengan baik
+                height: 120, // Height for the restaurant list container
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal, // Scroll horizontal
-                  itemCount: 10, // Jumlah restoran yang ingin ditampilkan
+                  scrollDirection: Axis.horizontal, // Horizontal scroll
+                  itemCount: _visibleRestaurants.length, // Show the visible restaurants
                   itemBuilder: (context, index) {
-                    // Data restoran simulasi
-                    final restaurantData = [
-                      {'image': 'assets/mujigae.png', 'name': 'Mujigae'},
-                      {'image': 'assets/ancon.png', 'name': 'Ancon'},
-                      {'image': 'assets/takarajima.png', 'name': 'Takarajima'},
-                      {'image': 'assets/restaurant4.png', 'name': 'Restaurant 4'},
-                      {'image': 'assets/restaurant5.png', 'name': 'Restaurant 5'},
-                      {'image': 'assets/restaurant6.png', 'name': 'Restaurant 6'},
-                      {'image': 'assets/restaurant7.png', 'name': 'Restaurant 7'},
-                      {'image': 'assets/restaurant8.png', 'name': 'Restaurant 8'},
-                      {'image': 'assets/restaurant9.png', 'name': 'Restaurant 9'},
-                      {'image': 'assets/restaurant10.png', 'name': 'Restaurant 10'},
-                    ];
-
-                    final restaurant = restaurantData[index % restaurantData.length];
+                    final restaurant = _visibleRestaurants[index];
                     return _buildRestaurantCard(
                       restaurant['image']!,
                       restaurant['name']!,
@@ -109,7 +128,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
               ),
               SizedBox(height: 16),
 
-              // Depok Rasa Pick
+              // Depok Rasa Pick (Food Grid)
               const Text(
                 'Depok Rasa Pick',
                 style: TextStyle(
@@ -139,18 +158,20 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
 
               // Show More Button
               SizedBox(height: 16),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('Show More'),
-                ),
-              ),
+              !_showAll
+                  ? Center(
+                      child: ElevatedButton(
+                        onPressed: _showMore,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text('Show More'),
+                      ),
+                    )
+                  : Container(), // Hide the button once all restaurants are shown
             ],
           ),
         ),
