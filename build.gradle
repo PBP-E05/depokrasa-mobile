@@ -1,18 +1,15 @@
 buildscript {
     ext {
-        // ...existing code...
-        kotlin_version = '1.5.21'
-        // ...existing code...
+        kotlin_version = '1.8.20'
+        agp_version = '8.0.0'
     }
     repositories {
         google()
         mavenCentral()
-        // ...existing code...
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath "com.android.tools.build:gradle:$agp_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // ...existing code...
     }
 }
 
@@ -20,7 +17,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // ...existing code...
     }
 }
 
