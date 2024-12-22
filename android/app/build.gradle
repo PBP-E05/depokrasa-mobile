@@ -1,9 +1,7 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
-}
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+// The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+apply plugin: "dev.flutter.flutter-gradle-plugin"
 
 android {
     namespace = "com.example.depokrasa_mobile"
