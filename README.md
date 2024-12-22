@@ -3,6 +3,9 @@
 ## URL APK
 - [DepokRasa Mobile]()
 ---
+## Video Promosi
+- https://drive.google.com/file/d/1A4gTC5SvuyfDNYDdQWHQtnaI78bXjLrW/view?usp=sharing
+---
 ## Daftar Anggota
 - Muhammad Wendy Fyfo Anggara (2306223906)
 - Laurentius Farel Arlana Mahardika (2306244892)
