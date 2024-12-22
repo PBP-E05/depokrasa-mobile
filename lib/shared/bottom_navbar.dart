@@ -4,6 +4,7 @@ import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
+import 'package:depokrasa_mobile/promosiDanDiskon/screen/promotion_page.dart'; // Import PromotionsPage
 
 class BottomNavBar extends StatefulWidget {
   final depokrasa_user.User user; // Add user parameter
@@ -31,8 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         PageController(initialPage: _currentIndex); // Initialize PageController
     _pages = [
       DepokRasaHomePage(user: widget.user), // Pass user parameter
-      DepokRasaHomePage(user: widget.user), // Pass user parameter
-      DepokRasaHomePage(user: widget.user), // Pass user parameter
+      PromotionsPage(user: widget.user), // Add PromotionsPage
       ArticlesPage(),
       FeedbackSupportPage(),
       UserProfileScreen(
@@ -78,12 +78,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Gift',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorites',
+            icon: Icon(Icons.local_offer), // Update icon for Promotions
+            label: 'Promotions', // Update label for Promotions
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
