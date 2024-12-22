@@ -736,7 +736,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                 ),
               ),
               Expanded(
-                flex: 15, 
+                flex: 13, 
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Container(
@@ -744,7 +744,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                     child: Text(
                       restaurantName.replaceAll("-"," "),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.bold,
                         fontSize: 14
@@ -754,13 +754,15 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                 )
               ),
               Expanded(
-                flex: 10, 
+                flex: 12, 
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.only(right: 8,left:8, bottom:2),
                   child: Container(
+                    alignment: Alignment.centerRight,
                     color: Colors.green,
                     decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.green),
                     ),
                     child: Text(
                       "Rp$price", 
