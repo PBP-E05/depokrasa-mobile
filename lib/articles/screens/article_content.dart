@@ -101,7 +101,7 @@ class _ArticleContentPageState extends State<ArticleContentPage> {
                       padding: const EdgeInsets.only(left: 18.0),
                       child: InkWell(
                         onTap: () async {
-                          Navigator.pop(context);  // Navigate back on tap
+                          Navigator.pop(context); // Navigate back on tap
                         },
                         child: const Icon(
                           Icons.arrow_back,
@@ -198,7 +198,7 @@ class _ArticleContentPageState extends State<ArticleContentPage> {
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                                         decoration: BoxDecoration(
-                                        color: const Color(0xFFFB633A),
+                                        color: Colors.orange,
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: Text(
@@ -250,7 +250,7 @@ class _ArticleContentPageState extends State<ArticleContentPage> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFB633A),
+                              backgroundColor: Colors.orange,
                               foregroundColor: const Color(0xFFFFFFFF)
                             ),
                             child: const Text(
