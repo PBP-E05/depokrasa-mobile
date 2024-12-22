@@ -6,6 +6,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:depokrasa_mobile/authentication/screens/login.dart';
+import 'package:flutter/foundation.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

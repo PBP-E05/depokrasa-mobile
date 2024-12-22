@@ -1,5 +1,6 @@
 import 'dart:convert';
 // import 'package:depokrasa_mobile/promosiDanDiskon/screen/promotion_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/discounts.dart';
 import '../models/promotions.dart';
@@ -7,7 +8,7 @@ import '../models/promotions.dart';
 
 class ApiService {
   // Sementara gini dulu
-  final String baseUrl = 'http://127.0.0.1:8000/promotions';
+  final String baseUrl = kDebugMode ? "http://127.0.0.1:8000" : "https://sx6s6j6f-8000.asse.devtunnels.ms/"; 
 
   Future<List<Discounts>> fetchDiscounts() async {
     final response = await http.get(Uri.parse('$baseUrl/api/discounts/'));
