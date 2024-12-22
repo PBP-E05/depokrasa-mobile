@@ -9,7 +9,7 @@ import 'package:depokrasa_mobile/models/featured_news.dart';
 import 'package:depokrasa_mobile/models/user.dart' as depokrasa_user;
 import 'package:depokrasa_mobile/featured_news/screens/addnews.dart';
 import 'package:depokrasa_mobile/featured_news/screens/editnews.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
 
 class MyHomePage extends StatefulWidget {
   final depokrasa_user.User user;
@@ -198,10 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      // bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
     );
   }
 

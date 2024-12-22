@@ -2,10 +2,13 @@ import 'package:depokrasa_mobile/screen/menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data'; // Untuk Uint8List
 import 'package:image_picker/image_picker.dart'; // Import image_picker
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
 
 class AddMenuForm extends StatefulWidget {
-  const AddMenuForm({super.key});
+  final User user; // Add this line to define the user parameter
+
+  const AddMenuForm({Key? key, required this.user}) : super(key: key); // Update the constructor
 
   @override
   State<AddMenuForm> createState() => _AddMenuFormState();
@@ -173,10 +176,7 @@ class _AddMenuFormState extends State<AddMenuForm> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
     );
   }
 }

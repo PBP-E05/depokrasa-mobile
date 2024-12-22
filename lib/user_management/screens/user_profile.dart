@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
-
-export 'package:depokrasa_mobile/user_management/screens/user_profile.dart';
+// import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
 
 class UserProfileScreen extends StatefulWidget {
+  final User user; // Add this line to define the user parameter
+
+  const UserProfileScreen({Key? key, required this.user}) : super(key: key); // Update the constructor
+
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
@@ -123,10 +127,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       appBar: AppBar(
         title: Text('User Profile'),
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -165,7 +166,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               radius: 50,
               backgroundImage: profilePictureUrl.isNotEmpty
                   ? NetworkImage(profilePictureUrl)
-                  : AssetImage('images/image1.jpg'),
+                  : AssetImage('images/image1.jpg') as ImageProvider,
             ),
             SizedBox(height: 16),
             Text(

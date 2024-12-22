@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/screen/addmenuform.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
 
 void main() {
   runApp(DepokRasaApp());
@@ -11,12 +12,16 @@ class DepokRasaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DepokRasaHomePage(),
+      home: DepokRasaHomePage(user: User(username: 'admin', isAdmin: true)), // Pass a User instance here
     );
   }
 }
 
 class DepokRasaHomePage extends StatefulWidget {
+  final User user; // Add this line to define the user parameter
+
+  const DepokRasaHomePage({Key? key, required this.user}) : super(key: key); // Update the constructor
+
   @override
   _DepokRasaHomePageState createState() => _DepokRasaHomePageState();
 }
@@ -178,10 +183,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
       ),
 
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
 
       // FloatingActionButton
       floatingActionButton: FloatingActionButton(
@@ -189,7 +191,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AddMenuForm(),
+              builder: (context) => AddMenuForm(user: widget.user), // Pass the user parameter here
             ),
           );
         },

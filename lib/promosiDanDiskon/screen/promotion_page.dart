@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/discounts.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/promotions.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/services/ApiService.dart';
-import 'package:depokrasa_mobile/shared/left_drawer.dart';
+import 'package:depokrasa_mobile/shared/bottom_navbar.dart';
+import 'package:depokrasa_mobile/models/user.dart'; // Import the User class
 
 class PromotionsPage extends StatefulWidget {
-  const PromotionsPage({Key? key}) : super(key: key);
+  final User user; // Add this line to define the user parameter
+
+  const PromotionsPage({Key? key, required this.user}) : super(key: key); // Update the constructor
 
   @override
   State<PromotionsPage> createState() => _PromotionsPageState();
@@ -74,10 +77,7 @@ void _onNavBarTap(int index) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavBarTap,
-      ),
+      bottomNavigationBar: BottomNavBar(user: widget.user), // Pass the user parameter here
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
