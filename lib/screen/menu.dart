@@ -340,6 +340,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                         snapshot.data[index~/3].name.toString().replaceAll(" ", "-").toLowerCase(),
                         baseUrl,
                         widget.user,
+                        snapshot.data[index~/3].name.toString(),
                         context // Pass context parameter
                       );
                     },
@@ -693,7 +694,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
   }
 
   // Widget untuk kartu makanan
-  Widget _buildFoodCard(String imagePath, String title, String price, String restaurantName, String baseUrl, depokrasa_user.User user, BuildContext context) {
+  Widget _buildFoodCard(String imagePath, String title, String price, String restaurantName, String baseUrl, depokrasa_user.User user, String restoName,BuildContext context) {
   return Card(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
@@ -742,7 +743,7 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
                   child: Container(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      restaurantName.replaceAll("-"," "),
+                      restoName,
                       style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'Inter',
@@ -756,23 +757,22 @@ class _DepokRasaHomePageState extends State<DepokRasaHomePage> {
               Expanded(
                 flex: 12, 
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8,left:8, bottom:2),
+                  padding: const EdgeInsets.only(right: 2,left:2, bottom:2),
                   child: Container(
                     alignment: Alignment.centerRight,
-                    color: Colors.green,
                     decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                      color: Colors.green,
+                          borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: Colors.green),
                     ),
                     child: Text(
-                      "Rp$price", 
+                      "Rp${price}    ", 
                       style: const TextStyle(
                         color: Colors.white,
                         fontFamily: 'Inter',
                         fontSize: 12,
                         fontWeight: FontWeight.bold
                       ),
-                      textAlign: TextAlign.end,
 
                     ),
                   )
