@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:depokrasa_mobile/authentication/screens/login.dart';
+// import 'package:depokrasa_mobile/authentication/screens/login.dart';
+import 'package:depokrasa_mobile/promosiDanDiskon/screen/promotion_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        home: const LoginPage(),
+        home: const PromotionsPage(),
       ),
     );
   }

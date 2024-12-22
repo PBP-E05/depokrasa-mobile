@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/discounts.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/models/promotions.dart';
 import 'package:depokrasa_mobile/promosiDanDiskon/services/ApiService.dart';
+import 'package:depokrasa_mobile/shared/left_drawer.dart';
 
 class PromotionsPage extends StatefulWidget {
   const PromotionsPage({Key? key}) : super(key: key);
@@ -17,12 +18,38 @@ class _PromotionsPageState extends State<PromotionsPage> {
   late Future<List<String>> _restaurantsFuture;
   List<String> _selectedRestaurants = [];
 
+  int _currentIndex = 1;
+
   @override
   void initState() {
     super.initState();
     _discountsFuture = apiService.fetchDiscounts();
     _promotionsFuture = apiService.fetchPromotions();
     _restaurantsFuture = apiService.fetchRestaurantNames();
+  }
+
+void _onNavBarTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Tambahkan navigasi logika jika diperlukan
+    switch (index) {
+      case 0:
+        // Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        break;
+      case 2:
+        // Navigator.pushNamed(context, '/favorites');
+        break;
+      case 3:
+        // Navigator.pushNamed(context, '/news');
+        break;
+      case 4:
+        // Navigator.pushNamed(context, '/profile');
+        break;
+    }
   }
 
   String _getRemainingTime(DateTime endTime) {
@@ -47,6 +74,10 @@ class _PromotionsPageState extends State<PromotionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: _onNavBarTap,
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
