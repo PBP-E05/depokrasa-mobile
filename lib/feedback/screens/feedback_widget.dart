@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FeedbackSupportPage extends StatelessWidget {
-  final String apiUrl = "http://127.0.0.1:8000/feedback/post/"; // Replace with your actual API URL
-  final String username = "testuser 1";
+  final String apiUrl = "http://127.0.0.1:8000/feedback/submit_feedback_anonymous/"; // Ganti dengan URL yang benar
 
   const FeedbackSupportPage({super.key});
 
@@ -161,10 +160,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
       final response = await http.post(
         Uri.parse(widget.apiUrl),
         headers: {
-          'Content-Type': 'application/json', // Send as JSON
+          'Content-Type': 'application/json', // Kirim sebagai JSON
         },
         body: jsonEncode({
-          'username': 'testuser 1',
           'subject': subjectController.text,
           'message': messageController.text,
         }),
@@ -180,7 +178,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
-                  'Error: ${errorResponse['detail'] ?? 'Failed to submit feedback'}')),
+                  'Error: ${errorResponse['error'] ?? 'Failed to submit feedback'}')),
         );
       }
     } catch (e) {
