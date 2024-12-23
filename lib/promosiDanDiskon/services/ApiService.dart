@@ -11,7 +11,7 @@ class ApiService {
   final String baseUrl = kDebugMode ? "http://127.0.0.1:8000" : "https://sx6s6j6f-8000.asse.devtunnels.ms/"; 
 
   Future<List<Discounts>> fetchDiscounts() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/discounts/'));
+    final response = await http.get(Uri.parse('$baseUrl/promotions/api/discounts/'));
     if (response.statusCode == 200) {
       return discountsFromJson(response.body);
     } else {
@@ -20,7 +20,7 @@ class ApiService {
   }
 
   Future<List<Promotions>> fetchPromotions() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/promotions/'));
+    final response = await http.get(Uri.parse('$baseUrl/promotions/api/promotions/'));
     if (response.statusCode == 200) {
       return promotionsFromJson(response.body);
     } else {
