@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> deleteNews(String newsId) async {
-    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id";
+    String baseUrl = kDebugMode ? "http://127.0.0.1:8000": "https://sx6s6j6f-8000.asse.devtunnels.ms/";
     String apiUrl = "$baseUrl/delete-news/$newsId/";
     
     try {

@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FeedbackSupportPage extends StatelessWidget {
-  final String apiUrl = "http://muhammad-wendy-depokrasa.pbp.cs.ui.ac.id/feedback/submit_feedback_anonymous/"; // Ganti dengan URL yang benar
+  final String baseUrl = "${kDebugMode ? "http://127.0.0.1:8000": "https://sx6s6j6f-8000.asse.devtunnels.ms/"}/feedback/submit_feedback_anonymous/"; // Ganti dengan URL yang benar
 
   const FeedbackSupportPage({super.key});
 
