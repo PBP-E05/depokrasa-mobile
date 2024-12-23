@@ -29,7 +29,7 @@ class ApiService {
   }
 
   Future<List<String>> fetchRestaurantNames() async {
-    final response = await http.get(Uri.parse('$baseUrl/restaurants/'));
+    final response = await http.get(Uri.parse('$baseUrl/promotions/restaurants/'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
