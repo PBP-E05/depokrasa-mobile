@@ -78,7 +78,7 @@ class FeedbackSupportPage extends StatelessWidget {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => FeedbackForm(apiUrl: apiUrl),
+                        builder: (context) => FeedbackForm(apiUrl: baseUrl),
                       );
                     },
                     style: ElevatedButton.styleFrom(
